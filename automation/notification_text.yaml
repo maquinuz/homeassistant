@@ -14,13 +14,17 @@
       from: 'off'
       to: 'on'
 
+  condition:
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
+
   action:
     - service: persistent_notification.create
       data:
         message: "Alarm Has Been Tripped!"
         title: "Alarm"
         notification_id: "1"
-
 
 - alias: Notification Text - Alarm
 
@@ -30,26 +34,127 @@
       from: 'off'
       to: 'on'
 
+  condition:
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
+
   action:
     - service: notify.ios_USER1s_iphone
       data:
-        message: Alarm Tripped
+        message: Alarm Tripped (Front Porch Camera)
         data:
           push:
             category: camera
-          entity_id: camera.garage
+          entity_id: camera.front_porch
+    - service: notify.ios_USER2s_iphone
+      data:
+        message: Alarm Tripped (Front Porch Camera)
+        data:
+          push:
+            category: camera
+          entity_id: front_porch
+    - service: notify.ios_USER1s_iphone
+      data:
+        message: Alarm Tripped (Garage Camera)
+        data:
+          push:
+            category: camera
+          entity_id: camera.backyard
+    - service: notify.ios_USER2s_iphone
+      data:
+        message: Alarm Tripped (Garage Camera)
+        data:
+          push:
+            category: camera
+          entity_id: camera.backyard
+    - service: notify.ios_USER1s_iphone
+      data:
+        message: Alarm Has Been Tripped!
+        data:
+          push:
+            badge: 0
+            category: "alarm"
+    - service: notify.ios_USER2s_iphone
+      data:
+        message: Alarm Has Been Tripped!
+        data:
+          push:
+            badge: 0
+            category: "alarm"
 
-        #################################################################
-        ## USER1 Home Notification
-        #################################################################
+    #################################################################
+    ## Alarm Enabled Notification
+    #################################################################
 
-- alias: Notification Text - USER1 Home
+- alias: Notification Text - Alarm Enabled Notification
+
+  trigger:
+    - platform: state
+      entity_id: input_boolean.enable_security
+      from: 'off'
+      to: 'on'
+
+  condition:
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
+
+  action:
+    - service: notify.ios_USER1s_iphone
+      data:
+        message: Alarm is ON
+    - service: notify.ios_USER2s_iphone
+      data:
+        message: Alarm is ON
+
+    #################################################################
+    ## Alarm Disabled Notification
+    #################################################################
+
+- alias: Notification Text - Alarm Disabled Notification
+
+  trigger:
+    - platform: state
+      entity_id: input_boolean.enable_security
+      from: 'on'
+      to: 'off'
+
+  condition:
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
+
+  action:
+    - service: notify.ios_USER1s_iphone
+      data:
+        message: Alarm is OFF
+    - service: notify.ios_USER2s_iphone
+      data:
+        message: Alarm is OFF
+
+    #################################################################
+    ## USER1 Home Driving Notification
+    #################################################################
+
+- alias: Notification Text - USER1 Home Driving
 
   trigger:
     - platform: state
       entity_id: device_tracker.USER1DEVICE
       from: 'not_home'
       to: 'home'
+
+  condition:
+    - condition: state
+      entity_id: input_boolean.USER1_away
+      state: 'on'
+    - condition: state
+      entity_id: input_boolean.USER1_away_driving
+      state: 'on'
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
 
   action:
     - service: notify.ios_USER1s_iphone
@@ -58,8 +163,53 @@
         data:
           push:
             category: camera
-          entity_id: camera.garage
+          entity_id: camera.driveway
+    - service: notify.ios_USER2s_iphone
+      data:
+        message: USER1 Home
+        data:
+          push:
+            category: camera
+          entity_id: camera.driveway
 
+    #################################################################
+    ## USER1 Home Walking Notification
+    #################################################################
+
+- alias: Notification Text - USER1 Home Walking
+
+  trigger:
+    - platform: state
+      entity_id: device_tracker.USER1DEVICE
+      from: 'not_home'
+      to: 'home'
+
+  condition:
+    - condition: state
+      entity_id: input_boolean.USER1_away
+      state: 'on'
+    - condition: state
+      entity_id: input_boolean.USER1_away_driving
+      state: 'off'
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
+
+  action:
+    - service: notify.ios_USER1s_iphone
+      data:
+        message: USER1 Home
+        data:
+          push:
+            category: camera
+          entity_id: camera.front_porch
+    - service: notify.ios_USER2s_iphone
+      data:
+        message: USER1 Home
+        data:
+          push:
+            category: camera
+          entity_id: camera.front_porch
 
         #################################################################
         ## USER1 Away Notification
@@ -73,22 +223,38 @@
       from: 'home'
       to: 'not_home'
 
+  condition:
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
+
   action:
     - service: notify.ios_USER1s_iphone
       data:
         message: USER1 Away
 
         #################################################################
-        ## USER2 Home Notification
+        ## USER2 Home Driving Notification
         #################################################################
 
-- alias: Notification Text - USER2 Home
+- alias: Notification Text - USER2 Home Driving
 
   trigger:
     - platform: state
       entity_id: device_tracker.USER2DEVICE
       from: 'not_home'
       to: 'home'
+
+  condition:
+    - condition: state
+      entity_id: input_boolean.USER2_away
+      state: 'on'
+    - condition: state
+      entity_id: input_boolean.USER2_away_driving
+      state: 'on'
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
 
   action:
     - service: notify.ios_USER1s_iphone
@@ -97,8 +263,39 @@
         data:
           push:
             category: camera
-          entity_id: camera.garage
+          entity_id: camera.driveway
 
+        #################################################################
+        ## USER2 Home Walking Notification
+        #################################################################
+
+- alias: Notification Text - USER2 Walking Driving
+
+  trigger:
+    - platform: state
+      entity_id: device_tracker.USER2DEVICE
+      from: 'not_home'
+      to: 'home'
+
+  condition:
+    - condition: state
+      entity_id: input_boolean.USER2_away
+      state: 'on'
+    - condition: state
+      entity_id: input_boolean.USER2_away_driving
+      state: 'off'
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
+
+  action:
+    - service: notify.ios_USER1s_iphone
+      data:
+        message: USER2 Home
+        data:
+          push:
+            category: camera
+          entity_id: camera.front_porch
 
         #################################################################
         ## USER2 Away Notification
@@ -111,6 +308,11 @@
       entity_id: device_tracker.USER2DEVICE
       from: 'home'
       to: 'not_home'
+
+  condition:
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
 
   action:
     - service: notify.ios_USER1s_iphone
@@ -129,10 +331,76 @@
       from: 'work'
       to: 'not_home'
 
+  condition:
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
+
   action:
     - service: notify.ios_USER1s_iphone
       data:
-        message: USER2 has left Work
+        message: "USER2 has left work, ETA: {{states('sensor.USER2_to_home')}} mins"
+
+        #################################################################
+        ## Guest Arrived Notification
+        #################################################################
+
+- alias: Notification Text - Guest Arrived Notification
+
+  trigger:
+    - platform: state
+      entity_id: group.friends_and_family
+      from: 'not_home'
+      to: 'home'
+
+  condition:
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
+
+  action:
+    - service: notify.ios_USER1s_iphone
+      data:
+        message: Guest Arrived (Front Porch Camera)
+        data:
+          push:
+            category: camera
+          entity_id: camera.front_porch
+    - service: notify.ios_USER2s_iphone
+      data:
+        message: Guest Arrived (Front Porch Camera)
+        data:
+          push:
+            category: camera
+          entity_id: front_porch
+    - service: notify.ios_USER1s_iphone
+      data:
+        message: Guest Arrived (Garage Camera)
+        data:
+          push:
+            category: camera
+          entity_id: camera.driveway
+    - service: notify.ios_USER2s_iphone
+      data:
+        message: Guest Arrived (Garage Camera)
+        data:
+          push:
+            category: camera
+          entity_id: camera.driveway
+    - service: notify.ios_USER1s_iphone
+      data:
+        message: Guest Arrived Unlock Doors?
+        data:
+          push:
+            badge: 0
+            category: "locks"
+    - service: notify.ios_USER2s_iphone
+      data:
+        message: Guest Arrived Unlock Doors?
+        data:
+          push:
+            badge: 0
+            category: "locks"
 
         #################################################################
         ## Motion Alarm Notification
@@ -142,7 +410,7 @@
 
   trigger:
     - platform: state
-      entity_id: group.alarm_occupancy
+      entity_id: group.occupancy
       from: 'off'
       to: 'on'
 
@@ -150,15 +418,53 @@
     - condition: state
       entity_id: group.household
       state: 'not_home'
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
 
   action:
     - service: notify.ios_USER1s_iphone
       data:
-        message: Motion Detected
+        message: Motion Detected (Front Porch Camera)
         data:
           push:
             category: camera
-          entity_id: camera.garage
+          entity_id: camera.front_porch
+    - service: notify.ios_USER2s_iphone
+      data:
+        message: Motion Detected (Front Porch Camera)
+        data:
+          push:
+            category: camera
+          entity_id: front_porch
+    - service: notify.ios_USER1s_iphone
+      data:
+        message: Motion Detected (Garage Camera)
+        data:
+          push:
+            category: camera
+          entity_id: camera.backyard
+    - service: notify.ios_USER2s_iphone
+      data:
+        message: Motion Detected (Garage Camera)
+        data:
+          push:
+            category: camera
+          entity_id: camera.backyard
+    - service: notify.ios_USER1s_iphone
+      data:
+        message: Motion Detected Alarm!
+        data:
+          push:
+            badge: 0
+            category: "alarm"
+    - service: notify.ios_USER2s_iphone
+      data:
+        message: Motion Detected Alarm!
+        data:
+          push:
+            badge: 0
+            category: "alarm"
 
         #################################################################
         ## Door Alarm Notification
@@ -176,15 +482,53 @@
     - condition: state
       entity_id: group.household
       state: 'not_home'
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
 
   action:
     - service: notify.ios_USER1s_iphone
       data:
-        message: Door Opened
+        message: Door Opened (Front Porch Camera)
         data:
           push:
             category: camera
-          entity_id: camera.garage
+          entity_id: camera.front_porch
+    - service: notify.ios_USER2s_iphone
+      data:
+        message: Door Opened (Front Porch Camera)
+        data:
+          push:
+            category: camera
+          entity_id: front_porch
+    - service: notify.ios_USER1s_iphone
+      data:
+        message: Door Opened (Garage Camera)
+        data:
+          push:
+            category: camera
+          entity_id: camera.backyard
+    - service: notify.ios_USER2s_iphone
+      data:
+        message: Door Opened (Garage Camera)
+        data:
+          push:
+            category: camera
+          entity_id: camera.backyard
+    - service: notify.ios_USER1s_iphone
+      data:
+        message: Door Opened Alarm!
+        data:
+          push:
+            badge: 0
+            category: "alarm"
+    - service: notify.ios_USER2s_iphone
+      data:
+        message: Door Opened Alarm!
+        data:
+          push:
+            badge: 0
+            category: "alarm"
 
         #################################################################
         ## Fireplace Alarm Notification
@@ -202,11 +546,58 @@
     - condition: state
       entity_id: group.household
       state: 'not_home'
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
 
   action:
     - service: notify.ios_USER1s_iphone
       data:
         message: Fireplace Turned On!
+        data:
+          push:
+            badge: 0
+            category: "fireplace"
+
+        #################################################################
+        ## Fireplace on for 4 Hours
+        #################################################################
+
+- alias: Notification Text - Fireplace on for 4 Hours
+
+  trigger:
+    - platform: state
+      entity_id: switch.fireplace
+      from: 'off'
+      to: 'on'
+      for:
+        hours: 4
+        minutes: 0
+        seconds: 0
+
+  condition:
+    - condition: state
+      entity_id: group.household
+      state: 'home'
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
+
+  action:
+    - service: notify.ios_USER1s_iphone
+      data:
+        message: Fireplace has been on for 4 Hours
+        data:
+          push:
+            badge: 0
+            category: "fireplace"
+    - service: notify.ios_USER2s_iphone
+      data:
+        message: Fireplace has been on for 4 Hours
+        data:
+          push:
+            badge: 0
+            category: "fireplace"
 
         #################################################################
         ## Garage Door Still Open Notification
@@ -224,42 +615,87 @@
         minutes: 35
         seconds: 0
 
+  condition:
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
+
   action:
     - service: notify.ios_USER1s_iphone
       data:
         message: Garage Door is Still Open!
+        data:
+          push:
+            category: camera
+          entity_id: camera.garage
+    - service: notify.ios_USER2s_iphone
+      data:
+        message: Garage Door is Still Open!
+        data:
+          push:
+            category: camera
+          entity_id: camera.garage
+    - service: notify.ios_USER1s_iphone
+      data:
+        message: Garage Door Still Open Close It?
+        data:
+          push:
+            badge: 0
+            category: "garage"
+    - service: notify.ios_USER2s_iphone
+      data:
+        message: Garage Door Still Open Close It?
+        data:
+          push:
+            badge: 0
+            category: "garage"
 
-        #################################################################
-        ## DNS Server 1 Down
-        #################################################################
+        ##########################################################
+        ## Doorbell Ring
+        ##########################################################
 
-- alias: Notification Text - DNS Server 1 Down
+- alias: Notification Text - Doorbell Ring
 
   trigger:
     - platform: state
-      entity_id: sensor.pihole_ads_blocked_today
-      to: 'unavailable'
+      entity_id: binary_sensor.ring_front_door_ding
+      from: 'off'
+      to: 'on'
+
+  condition:
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
 
   action:
     - service: notify.ios_USER1s_iphone
       data:
-        message: DNS Server 1 Not Responding
-
-        #################################################################
-        ## DNS Server 2 Down
-        #################################################################
-
-- alias: Notification Text - DNS Server 2 Down
-
-  trigger:
-    - platform: state
-      entity_id: sensor.pihole_ads_blocked_today_2
-      to: 'unavailable'
-
-  action:
+        message: Someone is at the Front Door
+        data:
+          push:
+            category: camera
+          entity_id: camera.front_porch
+    - service: notify.ios_USER2s_iphone
+      data:
+        message: Someone is at the Front Door
+        data:
+          push:
+            category: camera
+          entity_id: camera.front_porch
     - service: notify.ios_USER1s_iphone
       data:
-        message: DNS Server 2 Not Responding
+        message: Doorbell Rang Unlock Doors?
+        data:
+          push:
+            badge: 0
+            category: "locks"
+    - service: notify.ios_USER2s_iphone
+      data:
+        message: Doorbell Rang Unlock Doors?
+        data:
+          push:
+            badge: 0
+            category: "locks"
 
         #################################################################
         ## Weather Lookup Failing
@@ -272,10 +708,148 @@
       entity_id: sensor.dark_sky_humidity
       to: 'unknown'
 
+  condition:
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
+
   action:
     - service: notify.ios_USER1s_iphone
       data:
         message: Weather Lookup Problem!
+
+        #################################################################
+        ## NAS Warning
+        #################################################################
+
+- alias: Notification Text - NAS Warning
+
+  trigger:
+    - platform: state
+      entity_id: sensor.nas_status
+      to: 'warning'
+
+  condition:
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
+
+  action:
+    - service: notify.ios_USER1s_iphone
+      data:
+        message: NAS RAID Failing
+
+        ##########################################################
+        ## UPS Power Loss Alert
+        ##########################################################
+
+- alias: Notification Text - UPS Power Loss Alert
+
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.ups_input_voltage
+      below: 80
+
+  condition:
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
+
+  action:
+    - service: notify.ios_USER1s_iphone
+      data:
+        message: Power Outage Detected
+
+        ##########################################################
+        ## UPS Power Restored Alert
+        ##########################################################
+
+- alias: Notification Text - UPS Power Restored Alert
+
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.ups_input_voltage
+      above: 80
+
+  condition:
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
+    - condition: numeric_state
+      entity_id: 'sensor.uptime'
+      above: '0.01'
+
+  action:
+    - service: notify.ios_USER1s_iphone
+      data:
+        message: Power Restored
+
+        ##########################################################
+        ## UPS Low Battery Alert
+        ##########################################################
+
+- alias: Notification Text - UPS Low Battery Alert
+
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.ups_battery_charge
+      below: 15
+
+  condition:
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
+
+  action:
+    - service: notify.ios_USER1s_iphone
+      data:
+        message: "UPS Battery below 15%"
+
+        ##########################################################
+        ## UPS Low Runtime Alert
+        ##########################################################
+
+- alias: Notification Text - UPS Low Runtime Alert
+
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.ups_battery_runtime_mins
+      below: 15
+
+  condition:
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
+
+  action:
+    - service: notify.ios_USER1s_iphone
+      data:
+        message: "15 mins of UPS Battery Remaining!"
+
+        ##########################################################
+        ## Wink Relay Offline
+        ##########################################################
+
+- alias: Notification Text - Wink Relay Offline
+
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.wink_relay
+      to: 'unavailable'
+      for:
+        hours: 0
+        minutes: 10
+        seconds: 0
+
+  condition:
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
+
+  action:
+    - service: notify.ios_USER1s_iphone
+      data:
+        message: "Wink Relay Has Crahsed, Please Restart"
 
         #################################################################
         ## Home Assistant Started Notification
@@ -286,6 +860,11 @@
   trigger:
     - platform: homeassistant
       event: start
+
+  condition:
+    - condition: state
+      entity_id: input_boolean.disable_notifications
+      state: 'off'
 
   action:
     - service: notify.ios_USER1s_iphone

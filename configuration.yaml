@@ -4,12 +4,16 @@
 
 homeassistant:
   name: Home
-  latitude: REDACTED
-  longitude: REDACTED
-  elevation: REDACTED
+  latitude: !secret latitude
+  longitude: !secret longitude
+  elevation: !secret elevation
   unit_system: imperial
   time_zone: America/Chicago
   customize: !include customize.yaml
+  auth_providers:
+   - type: homeassistant
+   - type: trusted_networks
+   - type: legacy_api_password
 
 frontend:
 updater:
@@ -19,29 +23,28 @@ conversation:
 discovery:
   ignore:
     - apple_tv
-    - sonos
     - harmony
+    - deconz
+    - roku
 config:
 
 http:
-  api_password: REDACTED
-  ssl_certificate: /etc/letsencrypt/live/REDACTED/REDACTED
-  ssl_key: /etc/letsencrypt/live/REDACTED/REDACTED
-  base_url: REDACTED
+  api_password: !secret http_password
+  ssl_certificate: !secret ssl_certificate
+  ssl_key: !secret ssl_key
+  base_url: !secret base_url
   trusted_networks:
-    - 127.0.0.1
     - REDACTED.0/24
     - REDACTED.0/24
   ip_ban_enabled: true
-  login_attempts_threshold: 5
+  login_attempts_threshold: 3
 
 #################################################################
 ## Components
 #################################################################
 
 ecobee:
-  api_key: REDACTED
-  hold_temp: true
+  api_key: !secret ecobee_api_key
 
 hue:
   bridges:
@@ -60,55 +63,68 @@ emulated_hue:
 media_player:
   - platform: plex
     entity_namespace: 'plex'
-  - platform: sonos
-    hosts:
-      - REDACTED.200
-      - REDACTED.201
-      - REDACTED.202
-      - REDACTED.203
-      - REDACTED.204
-      - REDACTED.205
-      - REDACTED.206
-      - REDACTED.208
-      - REDACTED.209
-      - REDACTED.210
-  - platform: roku
+  - platform: yamaha
+    name: "Media Center Receiver"
+    host: REDACTED.94
+    source_ignore:
+      - "AUX"
+      - "AV1"
+      - "AV2"
+      - "AV3"
+      - "Bluetooth"
+      - "Deezer"
+      - "MusicCast Link"
+      - "NET RADIO"
+      - "Pandora"
+      - "SERVER"
+      - "Spotify"
+      - "TIDAL"
+      - "TUNER"
+      - "USB"
+    source_names:
+      HDMI1: "Apple TV"
+      HDMI2: "Xbox One X"
+      HDMI3: "Nintendo Switch"
+      HDMI4: "Wii U"
+      AUDIO1: "TV Audio"
+      AUDIO2: "Sonos Digital"
+      AUDIO3: "Sonos"
 
 apple_tv:
   - name: Living Room Apple TV
     host: REDACTED.150
-    login_id: REDACTED
+    login_id: !secret apple_tv_login_id
     start_off: false
   - name: Guest Bedroom Apple TV
     host: REDACTED.153
-    login_id: REDACTED
+    login_id: !secret apple_tv_login_id
     start_off: false
   - name: Bedroom Apple TV
     host: REDACTED.152
-    login_id: REDACTED
+    login_id: !secret apple_tv_login_id
     start_off: false
   - name: USER1's Office Apple TV
     host: REDACTED.151
-    login_id: REDACTED
+    login_id: !secret apple_tv_login_id
     start_off: false
 
 remote:
   - platform: harmony
     name: Media Center
     host: REDACTED.109
+    activity: Watch TV
   - platform: harmony
     name: Bedroom TV
     host: REDACTED.247
-
-ios:
+    activity: Watch TV
+  - platform: harmony
+    name: Office TV
+    host: REDACTED.176
+    activity: Watch TV
 
 map:
 
 wemo:
-  static:
-    - REDACTED.111
-    - REDACTED.112
-    - REDACTED.113
 
 switch:
   - platform: tplink
@@ -116,12 +132,12 @@ switch:
     name: MyQ Garage Outlet
 
 ifttt:
-  key: REDACTED
+  key: !secret ifttt_key
 
 device_tracker:
   - platform: unifi
-    username: REDACTED
-    password: REDACTED
+    username: !secret unifi_username
+    password: !secret unifi_password
     host: REDACTED.3
     verify_ssl: false
     consider_home: 180
@@ -132,50 +148,70 @@ device_tracker:
 
 cover:
   - platform: myq
-    username: REDACTED
-    password: REDACTED
+    username: !secret myq_username
+    password: !secret myq_password
     type: chamberlain
-  - platform: wink
-    entity_namespace: wink
 
 ring:
-    username: REDACTED
-    password: REDACTED
+    username: !secret ring_username
+    password: !secret ring_password
 
 binary_sensor:
   - platform: ring
     monitored_conditions:
       - ding
       - motion
+  - platform: ping
+    host: 8.8.8.8
+    name: WAN
+    scan_interval: 60
+  - platform: ping
+    host: REDACTED.1
+    name: Gateway
+    scan_interval: 60
+  - platform: ping
+    host: REDACTED.1
+    name: Charleston VPN
+    scan_interval: 60
+  - platform: ping
+    host: REDACTED.1
+    name: Rochester VPN
+    scan_interval: 60
 
 camera:
-  - platform: uvc
-    nvr: REDACTED.99
-    key: REDACTED
-    password: REDACTED
-  - platform: foscam
-    ip: REDACTED.107
-    name: Garage Interior
-    port: REDACTED
-    username: REDACTED
-    password: REDACTED
+  - platform: ffmpeg
+    input: -rtsp_transport tcp -i rtsp://REDACTED.3:7447/REDACTED
+    name: Front Porch
+  - platform: ffmpeg
+    input: -rtsp_transport tcp -i rtsp://REDACTED.3:7447/REDACTED
+    name: Driveway
+  - platform: ffmpeg
+    input: -rtsp_transport tcp -i rtsp://REDACTED.3:7447/REDACTED
+    name: Garage
+  - platform: ffmpeg
+    input: -rtsp_transport tcp -i rtsp://REDACTED.3:7447/REDACTED
+    name: Backyard
+  - platform: ffmpeg
+    input: -rtsp_transport tcp -i rtsp://REDACTED.3:7447/REDACTED
+    name: Side Yard
+#  - platform: ffmpeg
+#    input: -rtsp_transport tcp -i rtsp://REDACTED.3:7447/REDACTED
+#    name: Living Room
+#  - platform: ffmpeg
+#    input: -rtsp_transport tcp -i rtsp://REDACTED.3:7447/REDACTED
+#    name: Kitchen
   - platform: generic
     still_image_url: https://icons.wxug.com/data/weather-maps/radar/united-states/jefferson-city-missouri-region-current-radar-animation.gif
     name: MO Weather Radar
-# ffmpeg Crashing Docker Container // Removing until resolved
-#  - platform: ring
-#    entity_namespace: ring
-#  - platform: ffmpeg
-#    input: http://REDACTED/rtplive/REDACTED/playlist.m3u8
-#    name: REDACTED
-#    extra_arguments: '-headers "X-ForREDACTEDed-For: REDACTED"'
 
 tts:
-  - platform: google
+  - platform: amazon_polly
+    aws_access_key_id: !secret aws_access_key_id
+    aws_secret_access_key: !secret aws_secret_access_key
 
 google:
-  client_id: REDACTED
-  client_secret: REDACTED
+  client_id: !secret google_client_id
+  client_secret: !secret goole_client_secret
   track_new_calendar: true
 
 wink:
@@ -183,23 +219,31 @@ wink:
 vacuum:
   - platform: roomba
     host: REDACTED.228
-    username: REDACTED
-    password: REDACTED
+    username: !secret downstairs_roomba_username
+    password: !secret downstairs_roomba_password
+    name: Downstairs Roomba
+  - platform: roomba
+    host: REDACTED.229
+    username: !secret upstairs_roomba_username
+    password: !secret upstairs_roomba_password
+    name: Upstairs Roomba
 
-climate:
-  - platform: generic_thermostat
-    name: Basement Heater
-    heater: switch.basement_heater
-    target_sensor: sensor.laundry_room_temperature
-    #Winter Temp
-    target_temp: 68
-    #Summer Temp
-    #target_temp: 45
-    min_cycle_duration: 15
-    cold_tolerance: 1
-    hot_tolerance: .5
-    max_temp: 78
-    away_temp: 33
+weather:
+  - platform: darksky
+    api_key: !secret darksky_api_key
+    mode: daily
+
+nest:
+  client_id: !secret nest_client_id
+  client_secret: !secret nest_client_secret
+
+dyson:
+  username: !secret dyson_username
+  password: !secret dyson_password
+  language: GB
+  devices:
+    - device_id: !secret dyson_id
+      device_ip: REDACTED.95
 
 #################################################################
 ## Includes
@@ -217,3 +261,6 @@ input_boolean: !include input_boolean.yaml
 input_select: !include input_select.yaml
 script: !include scripts.yaml
 weblink: !include weblinks.yaml
+light: !include light_group.yaml
+homekit: !include homekit.yaml
+ios: !include ios.yaml

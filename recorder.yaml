@@ -4,7 +4,7 @@
 
   purge_interval: 2
   purge_keep_days: 14
-  db_url: mysql://REDACTED@REDACTED.101/REDACTED
+  db_url: !secret db_url
 
   exclude:
     domains:
@@ -26,7 +26,6 @@
       - binary_sensor.living_room
       - binary_sensor.office
       - binary_sensor.USER2_office
-      - climate.main_floor_2
       - cover.wink_garage_door
       - cover.garage_door_2
       - cover.myq
@@ -40,6 +39,8 @@
       - group.all_scripts
       - group.all_switches
       - group.all_locks
+      - group.all_vacuum_cleaners
+      - group.all_binary_sensors
       - group.automation
       - group.automation_on_demand
       - group.automation_override
@@ -47,6 +48,7 @@
       - group.basements
       - group.bathroom
       - group.bathrooms
+      - group.upstairs_bathroom
       - group.battery_levels
       - group.bedroom
       - group.bedrooms
@@ -58,10 +60,14 @@
       - group.door_locks
       - group.exterior_lights
       - group.garage
-      - group.garage_outlets
+      - group.garage_status
       - group.guest_bedroom
       - group.hue_lights
       - group.hue_lights_exterior
+      - group.wink_lights
+      - group.wink_lights_exterior
+      - light.hue_lights
+      - light.hue_lights_exterior
       - group.indoor_temperature
       - group.interior
       - group.interior_lights
@@ -81,7 +87,7 @@
       - group.sensors
       - group.sonos
       - group.music
-      - group.system
+      - group.devices
       - group.thermostat
       - group.traffic
       - group.auto
@@ -91,49 +97,39 @@
       - group.humidity
       - group.weather_summary
       - group.weatherdashboard
-      - group.wink_lights
-      - group.wink_lights_exterior
+      - group.smoke_alarm
+      - group.ups
+      - group.speedtest
+      - group.garage_door
+      - group.equipment
+      - group.network
+      - group.smoke_alarm_battery
+      - group.home_assistant
+      - light.wink_lights
+      - light.wink_lights_exterior
       - group.calendar
       - group.holiday_modes
       - group.plex
       - group.nas
-      - group.input_boolean
+      - group.all_input_boolean
       - group.calendars
       - group.scenes
       - group.troubleshooting
+      - group.occupancy
       - group.dns
       - group.climate_control
       - group.locks
-      - light.USER1s_nightstand_2
-      - light.back_door_left_2
-      - light.back_door_right_2
-      - light.basement_light_1_2
-      - light.basement_light_2_2
-      - light.basement_light_3_2
-      - light.basement_light_4_2
-      - light.basement_stairs_2
-      - light.bedroom_lamp_2
-      - light.closet_lamp_2
-      - light.front_porch_left_2
-      - light.front_porch_right_2
-      - light.guest_bedroom_lamp_2
-      - light.guest_bedroom_nightstand_2
-      - light.hallway_light_2
-      - light.living_room_lamp_1_2
-      - light.living_room_lamp_2_2
-      - light.media_center_lighting_2
-      - light.office_lamp_2
-      - light.USER2s_nightstand_2
-      - light.USER2s_office_ceiling_1_2
-      - light.USER2s_office_ceiling_2_2
-      - light.stairs_1_2
-      - light.stairs_2_2
-      - light.stairs_3_2
-      - light.upper_patio_left_2
-      - light.upper_patio_right_2
+      - group.door_codes
+      - group.washing_machine
+      - group.interior_cameras
+      - group.front_yard_cameras
+      - group.garage_cameras
+      - group.backyard_cameras
+      - group.network_poe
+      - group.media_center_receiver
+      - group.heaters
       - light.bathroom
       - light.dining_room
-      - light.interior
       - light.kitchen
       - light.upstairs
       - sensor.USER1_to_home
@@ -157,7 +153,6 @@
       - sensor.dark_sky_precip_probability
       - sensor.dark_sky_pressure
       - sensor.dark_sky_summary
-      - sensor.dark_sky_temperature
       - sensor.dark_sky_visibility
       - sensor.dark_sky_wind_bearing
       - sensor.dark_sky_wind_speed
@@ -180,16 +175,10 @@
       - remote.media_center
       - group.friends_and_family
       - binary_sensor.philips_hue
-      - binary_sensor.wink_hub
-      - binary_sensor.wink_relay
       - sensor.USER1s_iphone_battery_level
       - sensor.USER2s_iphone_battery_level
       - sensor.USER1s_iphone_battery_state
       - sensor.USER2s_iphone_battery_state
-      - device_tracker.USER1s_iphone
-      - device_tracker.USER2s_iphone
-      - device_tracker.USER1siphone
-      - device_tracker.USER2siphone
       - binary_sensor.wink_relays_bottom_button
       - binary_sensor.wink_relays_top_button
       - binary_sensor.gang
@@ -197,7 +186,7 @@
       - sensor.wink_relay_sensor_temperature
       - binary_sensor.wink_relay_sensor_presence
       - sensor.holidays_calendar
-      - sensor.date__time
+      - sensor.date_time
       - sensor.USER2_work_offset
       - sensor.nas_used_space_storage
       - sensor.nas_used_space_backup
@@ -223,22 +212,22 @@
       - sensor.nas_temperature_drive_02
       - sensor.nas_temperature_drive_03
       - sensor.nas_temperature_drive_04
-      - sensor.pihole_ads_blocked_today
-      - sensor.pihole_ads_blocked_today_2
-      - sensor.pihole_ads_percentage_blocked_today
-      - sensor.pihole_ads_percentage_blocked_today_2
-      - sensor.pihole_dns_queries_cached
-      - sensor.pihole_dns_queries_cached_2
-      - sensor.pihole_dns_queries_forREDACTEDed
-      - sensor.pihole_dns_queries_forREDACTEDed_2
-      - sensor.pihole_dns_queries_today
-      - sensor.pihole_dns_queries_today_2
-      - sensor.pihole_dns_unique_clients
-      - sensor.pihole_dns_unique_clients_2
-      - sensor.pihole_dns_unique_domains
-      - sensor.pihole_dns_unique_domains_2
-      - sensor.pihole_domains_blocked
-      - sensor.pihole_domains_blocked_2
+      - sensor.pi_hole_ads_blocked_today
+      - sensor.pi_hole_ads_blocked_today_2
+      - sensor.pi_hole_ads_percentage_blocked_today
+      - sensor.pi_hole_ads_percentage_blocked_today_2
+      - sensor.pi_hole_dns_queries_cached
+      - sensor.pi_hole_dns_queries_cached_2
+      - sensor.pi_hole_dns_queries_forREDACTEDed
+      - sensor.pi_hole_dns_queries_forREDACTEDed_2
+      - sensor.pi_hole_dns_queries_today
+      - sensor.pi_hole_dns_queries_today_2
+      - sensor.pi_hole_dns_unique_clients
+      - sensor.pi_hole_dns_unique_clients_2
+      - sensor.pi_hole_dns_unique_domains
+      - sensor.pi_hole_dns_unique_domains_2
+      - sensor.pi_hole_domains_blocked
+      - sensor.pi_hole_domains_blocked_2
       - binary_sensor.front_door_button_pressed
       - binary_sensor.front_door_motion
       - sensor.ring_downstairs_volume
@@ -271,7 +260,43 @@
       - remote.bedroom
       - remote.bedroom_tv
       - sensor.uptime
-      - device_tracker.REDACTED
-      - device_tracker.REDACTEDiphone
       - weather.main_floor
       - sensor.moon
+      - device_tracker.REDACTEDiphone
+      - device_tracker.REDACTED
+      - device_tracker.REDACTED
+      - device_tracker.REDACTED
+      - device_tracker.REDACTED
+      - device_tracker.REDACTEDiphone
+      - device_tracker.REDACTED
+      - device_tracker.REDACTED
+      - weather.dark_sky
+      - sensor.ups_battery_runtime
+      - device_tracker.myqgaragehomehub
+      - device_tracker.hue_hub
+      - sensor.home_eta
+      - binary_sensor.home_away
+      - input_select.thermostat_mode
+      - binary_sensor.guest_back_door_code
+      - binary_sensor.guest_front_door_code
+      - group.guest_door_code
+      - binary_sensor.USER1_front_door_code
+      - binary_sensor.USER1_back_door_code
+      - binary_sensor.USER1_basement_door_code
+      - binary_sensor.USER2_front_door_code
+      - binary_sensor.USER2_back_door_code
+      - binary_sensor.USER2_basement_door_code
+      - group.door_codes
+      - group.USER1_door_codes
+      - group.USER2_door_codes
+      - group.vacuums
+      - group.garage_door
+      - sensor.unifigateway3_bytes_received
+      - sensor.unifigateway3_bytes_sent
+      - sensor.unifigateway3_kbytesec_received
+      - sensor.unifigateway3_kbytesec_sent
+      - sensor.unifigateway3_packets_received
+      - sensor.unifigateway3_packets_sent
+      - sensor.unifigateway3_packetssec_received
+      - sensor.unifigateway3_packetssec_sent
+      - device_tracker.attrouter

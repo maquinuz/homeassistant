@@ -27,8 +27,6 @@ input_select_harmony:
               22107302
           {% elif is_state("input_select.remote", "Play Sonos") %}
               22815026
-          {% elif is_state("input_select.remote", "Turn on Receiver") %}
-              22107111
           {% endif %}
 
 input_select_bedroom_harmony:
@@ -42,6 +40,21 @@ input_select_bedroom_harmony:
               -1
           {% elif is_state("input_select.bedroom_remote", "Watch TV") %}
               31071991
+          {% endif %}
+
+input_select_office_harmony:
+  alias: "Start Office Remote activity from input select"
+  sequence:
+      service: remote.turn_on
+      data_template:
+        entity_id: remote.office_tv
+        activity: >
+          {% if is_state("input_select.office_remote", "PowerOff") %}
+              -1
+          {% elif is_state("input_select.office_remote", "Watch TV") %}
+              33663475
+          {% elif is_state("input_select.office_remote", "Play Xbox One") %}
+              36216391
           {% endif %}
 
         ##########################################################
@@ -69,7 +82,7 @@ say:
         entity_id: "{{ where }}"
         volume_level: "{{ volume }}"
     - delay: '00:00:02'
-    - service: tts.google_say
+    - service: tts.amazon_polly_say
       data_template:
         entity_id: "{{ master }}"
         message: "{{ what }}"

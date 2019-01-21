@@ -42,7 +42,7 @@
   trigger:
     - platform: sun
       event: 'sunset'
-      offset: '-00:05:00'
+      offset: '-00:15:00'
 
   condition:
     - condition: state
@@ -211,6 +211,77 @@
         color_name: red
 
         ##########################################################
+        ## Enable New Years Eve Lighting
+        ##########################################################
+
+- alias: Holiday - Enable New Years Eve Lighting
+
+  trigger:
+    - platform: state
+      entity_id: calendar.holidays_in_united_states
+      to: 'on'
+      for:
+        hours: 9
+        minutes: 0
+        seconds: 0
+
+  condition:
+    condition: or
+    conditions:
+      - condition: state
+        entity_id: sensor.holidays_calendar
+        state: "New Year's Eve"
+
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.holiday
+        option: "New Year's Eve"
+
+        ##########################################################
+        ## New Years Eve Lighting
+        ##########################################################
+
+- alias: Holiday - New Years Eve Lighting
+
+  trigger:
+    - platform: sun
+      event: 'sunset'
+      offset: '-00:15:00'
+
+  condition:
+    - condition: state
+      entity_id: input_boolean.disable_exterior_on_sunset
+      state: 'off'
+    - condition: state
+      entity_id: input_select.holiday
+      state: "New Year's Eve"
+
+  action:
+    - service: light.turn_on
+      entity_id:  light.front_porch_left
+      data:
+        effect: random
+        brightness_pct: 100
+    - service: light.turn_on
+      entity_id: light.front_porch_right
+      data:
+        effect: random
+        brightness_pct: 100
+    - delay: '00:00:15'
+    - service: light.turn_on
+      entity_id: light.front_porch_left
+      data:
+        effect: colorloop
+        brightness_pct: 100
+    - delay: '00:00:30'
+    - service: light.turn_on
+      entity_id: light.front_porch_right
+      data:
+        effect: colorloop
+        brightness_pct: 100
+
+        ##########################################################
         ## Enable Halloween Lighting
         ##########################################################
 
@@ -245,7 +316,7 @@
   trigger:
     - platform: sun
       event: 'sunset'
-      offset: '-00:05:00'
+      offset: '-00:15:00'
 
   condition:
     - condition: state
@@ -261,15 +332,157 @@
       data:
         transition: 900
         brightness_pct: 100
-        # Dark Orange
-        xy_color: [ 0.6164, 0.3645 ]
+        rgb_color: [255,85,7]
     - service: light.turn_on
       entity_id: light.front_porch_right
       data:
         transition: 900
         brightness_pct: 100
-        # Dark Orange
-        xy_color: [ 0.6164, 0.3645 ]
+        rgb_color: [160,6,255]
+
+        ##########################################################
+        ## Halloween Lighting Rotate on the Hour
+        ##########################################################
+
+- alias: Holiday - Halloween Lighting Rotate on the Hour
+
+  trigger:
+    platform: time
+    minutes: 0
+    seconds: 0
+
+  condition:
+    - condition: state
+      entity_id: sun.sun
+      state: 'below_horizon'
+    - condition: time
+      after: '15:00'
+      before: '23:59'
+    - condition: state
+      entity_id: input_select.holiday
+      state: 'Halloween'
+
+  action:
+    - service: light.turn_on
+      entity_id: light.front_porch_left
+      data:
+        transition: 5
+        brightness_pct: 100
+        rgb_color: [160,6,255]
+    - service: light.turn_on
+      entity_id: light.front_porch_right
+      data:
+        transition: 5
+        brightness_pct: 100
+        rgb_color: [255,85,7]
+
+        ##########################################################
+        ## Halloween Lighting Rotate 15 mins after the Hour
+        ##########################################################
+
+- alias: Holiday - Halloween Lighting Rotate 15 mins after the Hour
+
+  trigger:
+    platform: time
+    minutes: 15
+    seconds: 0
+
+  condition:
+    - condition: state
+      entity_id: sun.sun
+      state: 'below_horizon'
+    - condition: time
+      after: '15:00'
+      before: '23:59'
+    - condition: state
+      entity_id: input_select.holiday
+      state: 'Halloween'
+
+  action:
+    - service: light.turn_on
+      entity_id: light.front_porch_left
+      data:
+        transition: 5
+        brightness_pct: 100
+        rgb_color: [255,85,7]
+    - service: light.turn_on
+      entity_id: light.front_porch_right
+      data:
+        transition: 5
+        brightness_pct: 100
+        rgb_color: [160,6,255]
+
+        ##########################################################
+        ## Halloween Lighting Rotate 30 Mins after the Hour
+        ##########################################################
+
+- alias: Holiday - Halloween Lighting Rotate 30 Mins after the Hour
+
+  trigger:
+    platform: time
+    minutes: 30
+    seconds: 0
+
+  condition:
+    - condition: state
+      entity_id: sun.sun
+      state: 'below_horizon'
+    - condition: time
+      after: '15:00'
+      before: '23:59'
+    - condition: state
+      entity_id: input_select.holiday
+      state: 'Halloween'
+
+  action:
+    - service: light.turn_on
+      entity_id: light.front_porch_left
+      data:
+        transition: 5
+        brightness_pct: 100
+        rgb_color: [160,6,255]
+    - service: light.turn_on
+      entity_id: light.front_porch_right
+      data:
+        transition: 5
+        brightness_pct: 100
+        rgb_color: [255,85,7]
+
+        ##########################################################
+        ## Halloween Lighting Rotate 45 Mins After the Hour
+        ##########################################################
+
+- alias: Holiday - Halloween Lighting Rotate 45 Mins After the Hour
+
+  trigger:
+    platform: time
+    minutes: 45
+    seconds: 0
+
+  condition:
+    - condition: state
+      entity_id: sun.sun
+      state: 'below_horizon'
+    - condition: time
+      after: '15:00'
+      before: '23:59'
+    - condition: state
+      entity_id: input_select.holiday
+      state: 'Halloween'
+
+  action:
+    - service: light.turn_on
+      entity_id: light.front_porch_left
+      data:
+        transition: 5
+        brightness_pct: 100
+        rgb_color: [255,85,7]
+    - service: light.turn_on
+      entity_id: light.front_porch_right
+      data:
+        transition: 5
+        brightness_pct: 100
+        rgb_color: 152,39,25
 
         ##########################################################
         ## Enable St. Patricks Day Lighting
@@ -306,7 +519,7 @@
   trigger:
     - platform: sun
       event: 'sunset'
-      offset: '-00:05:00'
+      offset: '-00:15:00'
 
   condition:
     - condition: state
@@ -365,7 +578,7 @@
   trigger:
     - platform: sun
       event: 'sunset'
-      offset: '-00:05:00'
+      offset: '-00:15:00'
 
   condition:
     - condition: state
@@ -381,13 +594,13 @@
       data:
         transition: 900
         brightness_pct: 100
-        color_name: "hot pink"
+        color_name: "deeppink"
     - service: light.turn_on
       entity_id: light.front_porch_right
       data:
         transition: 900
         brightness_pct: 100
-        color_name: "hot pink"
+        color_name: "deeppink"
 
         ##########################################################
         ## Cardinals Game Lighting
@@ -398,7 +611,7 @@
   trigger:
     - platform: sun
       event: 'sunset'
-      offset: '-00:05:00'
+      offset: '-00:15:00'
 
   condition:
     - condition: state
@@ -431,7 +644,7 @@
   trigger:
     - platform: sun
       event: 'sunset'
-      offset: '-00:05:00'
+      offset: '-00:15:00'
 
   condition:
     - condition: state
@@ -490,7 +703,7 @@
   trigger:
     - platform: sun
       event: 'sunset'
-      offset: '-00:05:00'
+      offset: '-00:15:00'
 
   condition:
     - condition: state
@@ -506,13 +719,13 @@
       data:
         transition: 900
         brightness_pct: 100
-        color_name: indigo
+        color_name: "indigo"
     - service: light.turn_on
       entity_id: light.front_porch_right
       data:
         transition: 900
         brightness_pct: 100
-        xy_color: [ 0.4283, 0.2298 ]
+        color_name: "tomato"
 
         ##########################################################
         ## Enable Thanksgiving Lighting
@@ -550,7 +763,7 @@
   trigger:
     - platform: sun
       event: 'sunset'
-      offset: '-00:05:00'
+      offset: '-00:15:00'
 
   condition:
     - condition: state
@@ -566,14 +779,13 @@
       data:
         transition: 900
         brightness_pct: 100
-        # Orange
-        xy_color: [ 0.5781, 0.3921 ]
+        color_name: "darkorange"
     - service: light.turn_on
       entity_id: light.front_porch_right
       data:
         transition: 900
         brightness_pct: 100
-        xy_color: [ 0.4862, 0.4599 ]
+        color_name: "yellow"
 
         ##########################################################
         ## Enable Independence Day Lighting
@@ -688,7 +900,7 @@
   trigger:
     - platform: sun
       event: 'sunset'
-      offset: '-00:05:00'
+      offset: '-00:15:00'
 
   condition:
     condition: or
@@ -751,13 +963,19 @@
         brightness_pct: 100
         color_name: green
     - service: light.turn_on
-      entity_id: light.hallway_light
+      entity_id: light.bedroom_lamp
       data:
         transition: 5
         brightness_pct: 100
         color_name: red
     - service: light.turn_on
       entity_id: light.media_center_lighting
+      data:
+        transition: 5
+        brightness_pct: 100
+        color_name: green
+    - service: light.turn_on
+      entity_id: light.globe
       data:
         transition: 5
         brightness_pct: 100
@@ -796,13 +1014,19 @@
         brightness_pct: 100
         color_name: green
     - service: light.turn_on
-      entity_id: light.hallway_light
+      entity_id: light.bedroom_lamp
       data:
         transition: 5
         brightness_pct: 100
         color_name: red
     - service: light.turn_on
       entity_id: light.media_center_lighting
+      data:
+        transition: 5
+        brightness_pct: 100
+        color_name: green
+    - service: light.turn_on
+      entity_id: light.globe
       data:
         transition: 5
         brightness_pct: 100
@@ -841,13 +1065,19 @@
         brightness_pct: 100
         color_name: red
     - service: light.turn_on
-      entity_id: light.hallway_light
+      entity_id: light.bedroom_lamp
       data:
         transition: 5
         brightness_pct: 100
         color_name: green
     - service: light.turn_on
       entity_id: light.media_center_lighting
+      data:
+        transition: 5
+        brightness_pct: 100
+        color_name: red
+    - service: light.turn_on
+      entity_id: light.globe
       data:
         transition: 5
         brightness_pct: 100
@@ -876,29 +1106,31 @@
       data:
         transition: 5
         brightness_pct: 100
-        # Dark Orange
-        xy_color: [ 0.6164, 0.3645 ]
+        rgb_color: [255,85,7]
     - service: light.turn_on
       entity_id: light.living_room_lamp_2
       data:
         transition: 5
         brightness_pct: 100
-        # Dark Orange
-        xy_color: [ 0.6164, 0.3645 ]
+        rgb_color: [255,85,7]
     - service: light.turn_on
-      entity_id: light.hallway_light
+      entity_id: light.bedroom_lamp
       data:
         transition: 5
         brightness_pct: 100
-        # Dark Orange
-        xy_color: [ 0.6164, 0.3645 ]
+        rgb_color: [255,85,7]
     - service: light.turn_on
       entity_id: light.media_center_lighting
       data:
         transition: 5
         brightness_pct: 100
-        # Dark Orange
-        xy_color: [ 0.6164, 0.3645 ]
+        rgb_color: 152,39,25
+    - service: light.turn_on
+      entity_id: light.globe
+      data:
+        transition: 5
+        brightness_pct: 100
+        rgb_color: 152,39,25
 
         ##########################################################
         ## St. Patricks Day Lighting Interior
@@ -931,13 +1163,19 @@
         brightness_pct: 100
         color_name: green
     - service: light.turn_on
-      entity_id: light.hallway_light
+      entity_id: light.bedroom_lamp
       data:
         transition: 5
         brightness_pct: 100
         color_name: green
     - service: light.turn_on
       entity_id: light.media_center_lighting
+      data:
+        transition: 5
+        brightness_pct: 100
+        color_name: green
+    - service: light.turn_on
+      entity_id: light.globe
       data:
         transition: 5
         brightness_pct: 100
@@ -969,25 +1207,31 @@
       data:
         transition: 5
         brightness_pct: 100
-        color_name: "hot pink"
+        color_name: "deeppink"
     - service: light.turn_on
       entity_id: light.living_room_lamp_2
       data:
         transition: 5
         brightness_pct: 100
-        color_name: "hot pink"
+        color_name: "deeppink"
     - service: light.turn_on
-      entity_id: light.hallway_light
+      entity_id: light.bedroom_lamp
       data:
         transition: 5
         brightness_pct: 100
-        color_name: "hot pink"
+        color_name: "deeppink"
     - service: light.turn_on
       entity_id: light.media_center_lighting
       data:
         transition: 5
         brightness_pct: 100
-        color_name: "hot pink"
+        color_name: "deeppink"
+    - service: light.turn_on
+      entity_id: light.globe
+      data:
+        transition: 5
+        brightness_pct: 100
+        color_name: "deeppink"
 
         ##########################################################
         ## Cardinals Game Lighting Interior
@@ -1023,13 +1267,19 @@
         brightness_pct: 100
         color_name: red
     - service: light.turn_on
-      entity_id: light.hallway_light
+      entity_id: light.bedroom_lamp
       data:
         transition: 5
         brightness_pct: 100
         color_name: red
     - service: light.turn_on
       entity_id: light.media_center_lighting
+      data:
+        transition: 5
+        brightness_pct: 100
+        color_name: red
+    - service: light.turn_on
+      entity_id: light.globe
       data:
         transition: 5
         brightness_pct: 100
@@ -1069,13 +1319,19 @@
         brightness_pct: 100
         color_name: blue
     - service: light.turn_on
-      entity_id: light.hallway_light
+      entity_id: light.bedroom_lamp
       data:
         transition: 5
         brightness_pct: 100
         color_name: blue
     - service: light.turn_on
       entity_id: light.media_center_lighting
+      data:
+        transition: 5
+        brightness_pct: 100
+        color_name: blue
+    - service: light.turn_on
+      entity_id: light.globe
       data:
         transition: 5
         brightness_pct: 100
@@ -1104,25 +1360,31 @@
       data:
         transition: 5
         brightness_pct: 100
-        color_name: indigo
+        color_name: "indigo"
     - service: light.turn_on
       entity_id: light.living_room_lamp_2
       data:
         transition: 5
         brightness_pct: 100
-        xy_color: [ 0.4283, 0.2298 ]
+        color_name: "tomato"
     - service: light.turn_on
-      entity_id: light.hallway_light
+      entity_id: light.bedroom_lamp
       data:
         transition: 5
         brightness_pct: 100
-        xy_color: [ 0.4283, 0.2298 ]
+        color_name: "indigo"
     - service: light.turn_on
       entity_id: light.media_center_lighting
       data:
         transition: 5
         brightness_pct: 100
-        color_name: indigo
+        color_name: "tomato"
+    - service: light.turn_on
+      entity_id: light.globe
+      data:
+        transition: 5
+        brightness_pct: 100
+        color_name: "tomato"
 
         ##########################################################
         ## Thanksgiving Lighting Interior
@@ -1147,26 +1409,31 @@
       data:
         transition: 5
         brightness_pct: 100
-        # Orange
-        xy_color: [ 0.5781, 0.3921 ]
+        color_name: "darkorange"
     - service: light.turn_on
       entity_id: light.living_room_lamp_2
       data:
         transition: 5
         brightness_pct: 100
-        xy_color: [ 0.4862, 0.4599 ]
+        color_name: "yellow"
     - service: light.turn_on
-      entity_id: light.hallway_light
+      entity_id: light.bedroom_lamp
       data:
         transition: 5
         brightness_pct: 100
-        xy_color: [ 0.5781, 0.3921 ]
+        color_name: "darkorange"
     - service: light.turn_on
       entity_id: light.media_center_lighting
       data:
         transition: 5
         brightness_pct: 100
-        xy_color: [ 0.4862, 0.4599 ]
+        color_name: "yellow"
+    - service: light.turn_on
+      entity_id: light.globe
+      data:
+        transition: 5
+        brightness_pct: 100
+        color_name: "yellow"
 
         ##########################################################
         ## Independence / Memorial / Veterans / Labor Day Lighting Interior
@@ -1210,7 +1477,7 @@
         brightness_pct: 100
         color_name: red
     - service: light.turn_on
-      entity_id: light.hallway_light
+      entity_id: light.bedroom_lamp
       data:
         transition: 5
         brightness_pct: 100
@@ -1221,16 +1488,22 @@
         transition: 5
         brightness_pct: 100
         color_name: blue
+    - service: light.turn_on
+      entity_id: light.globe
+      data:
+        transition: 5
+        brightness_pct: 100
+        color_name: blue
 
         ##########################################################
-        ## Turn Off Holiday Lighting at 1:00 am
+        ## Turn Off Holiday Lighting at 2:00 am
         ##########################################################
 
 - alias: Holiday - Turn Off Lighting at at 2a
 
   trigger:
     - platform: time
-      at: '02:00'
+      at: '01:55'
 
   condition:
     condition: or
@@ -1264,6 +1537,9 @@
         state: 'Independence Day'
       - condition: state
         entity_id: input_select.holiday
+        state: "New Year's Eve"
+      - condition: state
+        entity_id: input_select.holiday
         state: 'Cardinals Game'
       - condition: state
         entity_id: input_select.holiday
@@ -1274,7 +1550,7 @@
 
   action:
     - service: light.turn_off
-      entity_id: group.front_porch
+      entity_id: light.front_porch
       data:
         transition: 300
 
@@ -1291,9 +1567,6 @@
   condition:
     condition: or
     conditions:
-      - condition: state
-        entity_id: input_select.holiday
-        state: 'Halloween'
       - condition: state
         entity_id: input_select.holiday
         state: "St. Patrick's Day"
@@ -1318,6 +1591,9 @@
       - condition: state
         entity_id: input_select.holiday
         state: 'Veterans Day'
+      - condition: state
+        entity_id: input_select.holiday
+        state: "New Year's Eve"
       - condition: state
         entity_id: input_select.holiday
         state: 'Cardinals Game'

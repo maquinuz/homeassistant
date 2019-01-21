@@ -34,10 +34,10 @@
 
   action:
     - service: light.turn_on
-      entity_id: group.living_room_lamps
+      entity_id: light.living_room_lamps
       data:
        transition: 5
-       profile: relax
+       color_temp: 447
        brightness_pct: 65
     - service: light.turn_on
       entity_id: light.media_center_lighting
@@ -48,9 +48,7 @@
     - service: light.turn_on
       entity_id: light.hallway_light
       data:
-       transition: 5
-       profile: relax
-       brightness_pct: 10
+       brightness_pct: 15
     - service: light.turn_on
       entity_id:
         - light.dining_room_table
@@ -62,6 +60,13 @@
       entity_id: light.kitchen_cabinets
       data:
        brightness_pct: 1
+    - service: light.turn_on
+      entity_id:
+        - light.globe
+      data:
+       transition: 15
+       color_temp: 366
+       brightness_pct: 20
 
         ##########################################################
         ## Plex Lights Off
@@ -87,15 +92,15 @@
       entity_id: input_boolean.watching_plex
     - service: light.turn_off
       entity_id:
-        - group.living_room_lights
-        - light.hallway_light
+        - light.living_room_lights
       data:
-       transition: 10
+       transition: 15
     - service: light.turn_off
       entity_id:
-        - group.dining_room
-        - group.kitchen
-        - light.bathroom_vanity
+        - light.dining_room_lights
+        - light.kitchen_lights
+        - light.bathroom_lights
+        - light.hallway_light
 
         ##########################################################
         ## Turn Off Watching Plex Boolean
@@ -114,6 +119,13 @@
     - platform: state
       entity_id: media_player.plex_living_room
       to: 'paused'
+      for:
+        hours: 0
+        minutes: 3
+        seconds: 0
+    - platform: state
+      entity_id: media_player.plex_living_room
+      to: 'unavailable'
       for:
         hours: 0
         minutes: 3
@@ -163,10 +175,10 @@
 
   action:
     - service: light.turn_on
-      entity_id: group.living_room_lamps
+      entity_id: light.living_room_lamps
       data:
        transition: 5
-       profile: relax
+       color_temp: 447
        brightness_pct: 50
     - service: light.turn_on
       entity_id: light.media_center_lighting
@@ -177,18 +189,26 @@
     - service: light.turn_on
       entity_id: light.hallway_light
       data:
-       transition: 1
-       profile: relax
-       brightness_pct: 1
+       brightness: 1
     - service: light.turn_on
       entity_id:
         - light.dining_room_table
-        - light.bathroom_vanity
         - light.kitchen_sink
         - light.kitchen_cabinets
       data:
        brightness_pct: 1
-
+    - service: light.turn_on
+      entity_id:
+        - light.bathroom_vanity
+      data:
+       brightness_pct: 30
+    - service: light.turn_on
+      entity_id:
+        - light.globe
+      data:
+       transition: 15
+       color_temp: 366
+       brightness_pct: 20
         ##########################################################
         ## Late Night TV Watching after Midnight Lights On
         ##########################################################
@@ -230,10 +250,10 @@
 
   action:
     - service: light.turn_on
-      entity_id: group.living_room_lamps
+      entity_id: light.living_room_lamps
       data:
        transition: 5
-       profile: relax
+       color_temp: 447
        brightness_pct: 50
     - service: light.turn_on
       entity_id: light.media_center_lighting
@@ -244,17 +264,26 @@
     - service: light.turn_on
       entity_id: light.hallway_light
       data:
-       transition: 1
-       profile: relax
        brightness_pct: 1
     - service: light.turn_on
       entity_id:
         - light.dining_room_table
-        - light.bathroom_vanity
         - light.kitchen_sink
         - light.kitchen_cabinets
       data:
        brightness_pct: 1
+    - service: light.turn_on
+      entity_id:
+        - light.bathroom_vanity
+      data:
+       brightness_pct: 30
+    - service: light.turn_on
+      entity_id:
+        - light.globe
+      data:
+       transition: 15
+       color_temp: 366
+       brightness_pct: 20
 
         ##########################################################
         ## Late Night TV Watching after Midnight Lights Off
@@ -291,15 +320,15 @@
   action:
     - service: light.turn_off
       entity_id:
-        - group.living_room_lights
-        - light.hallway_light
+        - light.living_room_lights
       data:
-       transition: 10
+       transition: 15
     - service: light.turn_off
       entity_id:
-        - group.dining_room
-        - group.kitchen
-        - light.bathroom_vanity
+        - light.dining_room_lights
+        - light.kitchen_lights
+        - light.bathroom_lights
+        - light.hallway_light
 
         ##########################################################
         ## Late Night TV Watching before Midnight Lights Off
@@ -335,15 +364,15 @@
   action:
     - service: light.turn_off
       entity_id:
-        - group.living_room_lights
-        - light.hallway_light
+        - light.living_room_lights
       data:
-       transition: 10
+       transition: 15
     - service: light.turn_off
       entity_id:
-        - group.dining_room
-        - group.kitchen
-        - light.bathroom_vanity
+        - light.dining_room_lights
+        - light.kitchen_lights
+        - light.bathroom_lights
+        - light.hallway_light
 
       #################################################################
       ## Living Room / Media Center Remote
@@ -466,6 +495,99 @@
         option: "PowerOff"
 
       #################################################################
+      ## Office Remote
+      #################################################################
+
+- alias: Media - Remote external update Office TV
+
+  trigger:
+    - platform: state
+      entity_id: remote.office_tv
+
+  action:
+    - delay: '00:00:10'
+    - service: input_select.select_option
+      data_template:
+        entity_id: input_select.office_remote
+        option: >
+          {{ states.remote.office_tv.attributes.current_activity }}
+
+- alias: Media - Remote start activity from input select Office TV
+
+  trigger:
+    - platform: state
+      entity_id: input_select.office_remote
+
+  action:
+    - service: script.turn_on
+      entity_id: script.input_select_office_harmony
+
+        ##########################################################
+        ## Office Harmony turn on Boolean
+        ##########################################################
+
+- alias: Media - Office Harmony turn on Boolean
+
+  trigger:
+    - platform: state
+      entity_id: input_select.office_tv
+      to: 'Watch TV'
+
+  action:
+    - service: homeassistant.turn_on
+      entity_id: input_boolean.office_tv
+
+        ##########################################################
+        ## Office Harmony Input Select on from Boolean
+        ##########################################################
+
+- alias: Media - Office Harmony Input Select on from Boolean
+
+  trigger:
+    - platform: state
+      entity_id: input_boolean.office_tv
+      to: 'on'
+
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.office_remote
+        option: "Watch TV"
+
+        ##########################################################
+        ## Office Harmony turn off Boolean
+        ##########################################################
+
+- alias: Media - Office Harmony turn off Boolean
+
+  trigger:
+    - platform: state
+      entity_id: input_select.office_remote
+      to: 'PowerOff'
+
+  action:
+    - service: homeassistant.turn_off
+      entity_id: input_boolean.office_tv
+
+        ##########################################################
+        ## Office Harmony Input Select off from Boolean
+        ##########################################################
+
+- alias: Media - Office Harmony Input Select off from Boolean
+
+  trigger:
+    - platform: state
+      entity_id: input_boolean.office_tv
+      to: 'off'
+
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.office_remote
+        option: "PowerOff"
+
+
+      #################################################################
       ## Reset Sonos Every Morning
       #################################################################
 
@@ -478,28 +600,28 @@
   action:
     - service: media_player.sonos_unjoin
       entity_id:
-        - media_player.media_center
-        - media_player.living_room
-        - media_player.dining_room
-        - media_player.kitchen
-        - media_player.bathroom
-        - media_player.bedroom
-        - media_player.USER1s_office
-        - media_player.USER2s_office
-        - media_player.basement
-        - media_player.backyard_patio
+        - media_player.sonos_media_center
+        - media_player.sonos_living_room
+        - media_player.sonos_dining_room
+        - media_player.sonos_kitchen
+        - media_player.sonos_bathroom
+        - media_player.sonos_bedroom
+        - media_player.sonos_USER1s_office
+        - media_player.sonos_USER2s_office
+        - media_player.sonos_basement
+        - media_player.sonos_backyard_patio
     - service: media_player.clear_playlist
       entity_id:
-        - media_player.media_center
-        - media_player.living_room
-        - media_player.dining_room
-        - media_player.kitchen
-        - media_player.bathroom
-        - media_player.bedroom
-        - media_player.USER1s_office
-        - media_player.USER2s_office
-        - media_player.basement
-        - media_player.backyard_patio
+        - media_player.sonos_media_center
+        - media_player.sonos_living_room
+        - media_player.sonos_dining_room
+        - media_player.sonos_kitchen
+        - media_player.sonos_bathroom
+        - media_player.sonos_bedroom
+        - media_player.sonos_USER1s_office
+        - media_player.sonos_USER2s_office
+        - media_player.sonos_basement
+        - media_player.sonos_backyard_patio
     - service: homeassistant.turn_off
       entity_id:
         - input_boolean.pop_music
@@ -534,17 +656,17 @@
   action:
     - service: media_player.sonos_join
       data:
-        master: media_player.living_room
+        master: media_player.sonos_living_room
       entity_id:
-        - media_player.living_room
-        - media_player.media_center
-        - media_player.dining_room
-        - media_player.kitchen
-        - media_player.bathroom
-        - media_player.bedroom
-        - media_player.USER1s_office
-        - media_player.USER2s_office
-        - media_player.basement
+        - media_player.sonos_living_room
+        - media_player.sonos_media_center
+        - media_player.sonos_dining_room
+        - media_player.sonos_kitchen
+        - media_player.sonos_bathroom
+        - media_player.sonos_bedroom
+        - media_player.sonos_USER1s_office
+        - media_player.sonos_USER2s_office
+        - media_player.sonos_basement
 
         ##########################################################
         ## Play Pop Music
@@ -566,27 +688,27 @@
   action:
     - service: media_player.sonos_join
       data:
-        master: media_player.living_room
+        master: media_player.sonos_living_room
       entity_id:
-        - media_player.living_room
-        - media_player.media_center
-        - media_player.dining_room
-        - media_player.kitchen
-        - media_player.bathroom
+        - media_player.sonos_living_room
+        - media_player.sonos_media_center
+        - media_player.sonos_dining_room
+        - media_player.sonos_kitchen
+        - media_player.sonos_bathroom
     - delay: '00:00:02'
     - service: media_player.volume_set
       entity_id:
-        - media_player.living_room
-        - media_player.media_center
-        - media_player.dining_room
-        - media_player.kitchen
-        - media_player.bathroom
+        - media_player.sonos_living_room
+        - media_player.sonos_media_center
+        - media_player.sonos_dining_room
+        - media_player.sonos_kitchen
+        - media_player.sonos_bathroom
       data:
-        volume_level: '.4'
+        volume_level: '0.4'
     - delay: '00:00:01'
     - service: media_player.select_source
       data:
-        entity_id: media_player.living_room
+        entity_id: media_player.sonos_living_room
         source: 'Pure Pop'
     - service: homeassistant.turn_off
       entity_id:
@@ -620,27 +742,27 @@
   action:
     - service: media_player.sonos_join
       data:
-        master: media_player.living_room
+        master: media_player.sonos_living_room
       entity_id:
-        - media_player.living_room
-        - media_player.media_center
-        - media_player.dining_room
-        - media_player.kitchen
-        - media_player.bathroom
+        - media_player.sonos_living_room
+        - media_player.sonos_media_center
+        - media_player.sonos_dining_room
+        - media_player.sonos_kitchen
+        - media_player.sonos_bathroom
     - delay: '00:00:02'
     - service: media_player.volume_set
       entity_id:
-        - media_player.living_room
-        - media_player.media_center
-        - media_player.dining_room
-        - media_player.kitchen
-        - media_player.bathroom
+        - media_player.sonos_living_room
+        - media_player.sonos_media_center
+        - media_player.sonos_dining_room
+        - media_player.sonos_kitchen
+        - media_player.sonos_bathroom
       data:
-        volume_level: '.4'
+        volume_level: '0.4'
     - delay: '00:00:01'
     - service: media_player.select_source
       data:
-        entity_id: media_player.living_room
+        entity_id: media_player.sonos_living_room
         source: 'Smooth Jazz'
     - service: homeassistant.turn_off
       entity_id:
@@ -674,27 +796,27 @@
   action:
     - service: media_player.sonos_join
       data:
-        master: media_player.living_room
+        master: media_player.sonos_living_room
       entity_id:
-        - media_player.living_room
-        - media_player.media_center
-        - media_player.dining_room
-        - media_player.kitchen
-        - media_player.bathroom
+        - media_player.sonos_living_room
+        - media_player.sonos_media_center
+        - media_player.sonos_dining_room
+        - media_player.sonos_kitchen
+        - media_player.sonos_bathroom
     - delay: '00:00:02'
     - service: media_player.volume_set
       entity_id:
-        - media_player.living_room
-        - media_player.media_center
-        - media_player.dining_room
-        - media_player.kitchen
-        - media_player.bathroom
+        - media_player.sonos_living_room
+        - media_player.sonos_media_center
+        - media_player.sonos_dining_room
+        - media_player.sonos_kitchen
+        - media_player.sonos_bathroom
       data:
-        volume_level: '.4'
+        volume_level: '0.4'
     - delay: '00:00:01'
     - service: media_player.select_source
       data:
-        entity_id: media_player.living_room
+        entity_id: media_player.sonos_living_room
         source: 'Classical'
     - service: homeassistant.turn_off
       entity_id:
@@ -728,27 +850,27 @@
   action:
     - service: media_player.sonos_join
       data:
-        master: media_player.living_room
+        master: media_player.sonos_living_room
       entity_id:
-        - media_player.living_room
-        - media_player.media_center
-        - media_player.dining_room
-        - media_player.kitchen
-        - media_player.bathroom
+        - media_player.sonos_living_room
+        - media_player.sonos_media_center
+        - media_player.sonos_dining_room
+        - media_player.sonos_kitchen
+        - media_player.sonos_bathroom
     - delay: '00:00:02'
     - service: media_player.volume_set
       entity_id:
-        - media_player.living_room
-        - media_player.media_center
-        - media_player.dining_room
-        - media_player.kitchen
-        - media_player.bathroom
+        - media_player.sonos_living_room
+        - media_player.sonos_media_center
+        - media_player.sonos_dining_room
+        - media_player.sonos_kitchen
+        - media_player.sonos_bathroom
       data:
-        volume_level: '.4'
+        volume_level: '0.4'
     - delay: '00:00:01'
     - service: media_player.select_source
       data:
-        entity_id: media_player.living_room
+        entity_id: media_player.sonos_living_room
         source: 'Atmospheric Electronic'
     - service: homeassistant.turn_off
       entity_id:
@@ -782,27 +904,27 @@
   action:
     - service: media_player.sonos_join
       data:
-        master: media_player.living_room
+        master: media_player.sonos_living_room
       entity_id:
-        - media_player.living_room
-        - media_player.media_center
-        - media_player.dining_room
-        - media_player.kitchen
-        - media_player.bathroom
+        - media_player.sonos_living_room
+        - media_player.sonos_media_center
+        - media_player.sonos_dining_room
+        - media_player.sonos_kitchen
+        - media_player.sonos_bathroom
     - delay: '00:00:02'
     - service: media_player.volume_set
       entity_id:
-        - media_player.living_room
-        - media_player.media_center
-        - media_player.dining_room
-        - media_player.kitchen
-        - media_player.bathroom
+        - media_player.sonos_living_room
+        - media_player.sonos_media_center
+        - media_player.sonos_dining_room
+        - media_player.sonos_kitchen
+        - media_player.sonos_bathroom
       data:
-        volume_level: '.4'
+        volume_level: '0.4'
     - delay: '00:00:01'
     - service: media_player.select_source
       data:
-        entity_id: media_player.living_room
+        entity_id: media_player.sonos_living_room
         source: 'Chill'
     - service: homeassistant.turn_off
       entity_id:
@@ -836,27 +958,27 @@
   action:
     - service: media_player.sonos_join
       data:
-        master: media_player.living_room
+        master: media_player.sonos_living_room
       entity_id:
-        - media_player.living_room
-        - media_player.media_center
-        - media_player.dining_room
-        - media_player.kitchen
-        - media_player.bathroom
+        - media_player.sonos_living_room
+        - media_player.sonos_media_center
+        - media_player.sonos_dining_room
+        - media_player.sonos_kitchen
+        - media_player.sonos_bathroom
     - delay: '00:00:02'
     - service: media_player.volume_set
       entity_id:
-        - media_player.living_room
-        - media_player.media_center
-        - media_player.dining_room
-        - media_player.kitchen
-        - media_player.bathroom
+        - media_player.sonos_living_room
+        - media_player.sonos_media_center
+        - media_player.sonos_dining_room
+        - media_player.sonos_kitchen
+        - media_player.sonos_bathroom
       data:
-        volume_level: '.4'
+        volume_level: '0.4'
     - delay: '00:00:01'
     - service: media_player.select_source
       data:
-        entity_id: media_player.living_room
+        entity_id: media_player.sonos_living_room
         source: 'Adele'
     - service: homeassistant.turn_off
       entity_id:
@@ -974,14 +1096,23 @@
   action:
     - service: media_player.media_stop
       entity_id:
-        - media_player.media_center
-        - media_player.living_room
-        - media_player.dining_room
-        - media_player.kitchen
-        - media_player.bathroom
-        - media_player.USER1s_office
-        - media_player.USER2s_office
-        - media_player.basement
+        - media_player.sonos_media_center
+        - media_player.sonos_living_room
+        - media_player.sonos_dining_room
+        - media_player.sonos_kitchen
+        - media_player.sonos_bathroom
+        - media_player.sonos_USER1s_office
+        - media_player.sonos_USER2s_office
+        - media_player.sonos_basement
+    - service: homeassistant.turn_off
+      entity_id:
+        - input_boolean.pop_music
+        - input_boolean.jazz_music
+        - input_boolean.chill_music
+        - input_boolean.electronic_music
+        - input_boolean.classical_music
+        - input_boolean.adele_music
+        - input_boolean.group_all_sonos
 
         ##########################################################
         ## Turn Down Backyard Sonos at 10p
@@ -996,9 +1127,9 @@
   action:
     - service: media_player.volume_set
       entity_id:
-        - media_player.backyard_patio
+        - media_player.sonos_backyard_patio
       data:
-        volume_level: '.3'
+        volume_level: '0.3'
 
         ##########################################################
         ## Turn Off Backyard Sonos at Midnight
@@ -1013,7 +1144,7 @@
   action:
     - service: media_player.media_stop
       entity_id:
-        - media_player.backyard_patio
+        - media_player.sonos_backyard_patio
 
         ##########################################################
         ## Reset Backyard Sonos Volume if after 10p
@@ -1023,7 +1154,7 @@
 
   trigger:
    - platform: numeric_state
-     entity_id: media_player.backyard_patio
+     entity_id: media_player.sonos_backyard_patio
      value_template: '{{ state.attributes.volume_level }}'
      above: '0.3'
 
@@ -1035,9 +1166,9 @@
   action:
     - service: media_player.volume_set
       entity_id:
-        - media_player.backyard_patio
+        - media_player.sonos_backyard_patio
       data:
-        volume_level: '.3'
+        volume_level: '0.3'
 
 
         ##########################################################
@@ -1048,9 +1179,9 @@
 
   trigger:
    - platform: numeric_state
-     entity_id: media_player.backyard_patio
+     entity_id: media_player.sonos_backyard_patio
      value_template: '{{ state.attributes.volume_level }}'
-     above: '0.2'
+     above: '0.3'
 
   condition:
     - condition: time
@@ -1060,9 +1191,9 @@
   action:
     - service: media_player.volume_set
       entity_id:
-        - media_player.backyard_patio
+        - media_player.sonos_backyard_patio
       data:
-        volume_level: '.2'
+        volume_level: '0.3'
 
         ##########################################################
         ## Turn Off Bedroom TV at 6a (Sleep Timer Fix)

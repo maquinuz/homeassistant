@@ -32,22 +32,22 @@
       entity_id: group.household
       state: 'home'
     - condition: state
-      entity_id: group.living_room_lights
+      entity_id: light.living_room_lights
       state: 'off'
     - condition: state
-      entity_id: group.dining_room_lights
+      entity_id: light.dining_room_lights
       state: 'off'
     - condition: state
-      entity_id: group.kitchen_lights
+      entity_id: light.kitchen_lights
       state: 'off'
 
   action:
     - service: light.turn_on
       entity_id:
-        - group.living_room_lights
-        - light.hallway_light
+        - light.living_room_lamps
+        - light.media_center_lighting
       data:
-        xy_color: [ 0.5134, 0.4149 ]
+        color_temp: 447
         brightness_pct: 50
         transition: 300
     - service: light.turn_on
@@ -55,8 +55,16 @@
         - light.kitchen_cabinets
         - light.dining_room_table
         - light.kitchen_sink
+        - light.hallway_light
       data:
         brightness_pct: 1
+    - service: light.turn_on
+      entity_id:
+        - light.globe
+      data:
+        color_name: blue
+        brightness_pct: 100
+        transition: 90
 
         ##########################################################
         ## Turn On USER2 Office when Raining
@@ -86,22 +94,18 @@
       entity_id: group.household
       state: 'home'
     - condition: state
-      entity_id: group.USER2_office
-      state: 'off'
-    - condition: state
-      entity_id: group.USER2_office_lights
+      entity_id: light.USER2_office_lights
       state: 'off'
 
   action:
     - service: light.turn_on
       entity_id:
-        - group.USER2_office
+        - light.USER2_office_lights
       data:
         transition: 300
-        brightness_pct: 50
+        brightness_pct: 5
     - service: light.turn_on
       entity_id:
-        - group.stairs
+        - light.stairs
       data:
-        transition: 10
-        brightness_pct: 1
+        brightness_pct: 5

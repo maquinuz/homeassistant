@@ -1,0 +1,43 @@
+#################################################################
+## HomeKit
+#################################################################
+
+  filter:
+    exclude_domains:
+      - light
+      - device_tracker
+      - input_boolean
+      - remote
+      - script
+      - alarm_control_panel
+      - cover
+      - sensor
+      - automation
+      - media_player
+      - binary_sensor
+    include_entities:
+      - light.hallway_light
+      - light.bathroom_lights
+      - light.garage_light
+      - light.living_room_lights
+      - light.dining_room_lights
+      - light.bedroom_lights
+      - light.kitchen_lights
+      - light.stairs
+      - light.USER1_office_lights
+      - light.USER2_office_lights
+      - light.guest_bedroom_lights
+      - light.basement_lighting
+      - light.front_porch
+      - light.back_door
+      - light.backyard_deck
+      - light.backyard_patio
+      - light.upstairs_bathroom_lights
+      - fan.office_fan
+    exclude_entities:
+      - switch.living_room_ceiling_fan
+      - switch.myq_garage_outlet
+      - switch.front_porch_camera
+      - switch.side_yard_camera
+      - switch.backyard_camera
+      - switch.washing_machine

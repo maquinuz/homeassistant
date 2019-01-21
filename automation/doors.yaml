@@ -24,7 +24,8 @@
 
   action:
     - service: light.turn_on
-      entity_id: group.front_porch
+      entity_id:
+        - light.front_porch
       data:
         brightness_pct: 100
 
@@ -60,7 +61,8 @@
 
   action:
     - service: light.turn_on
-      entity_id: group.front_porch
+      entity_id:
+        - light.front_porch
       data:
         brightness_pct: 40
         transition: 120
@@ -97,7 +99,8 @@
 
   action:
     - service: light.turn_off
-      entity_id: group.front_porch
+      entity_id:
+        - light.front_porch
       data:
         transition: 900
 
@@ -105,7 +108,7 @@
         ## Turn On Living Room when Front Door Opens
         ##########################################################
 
-- alias: Doors - Turn on Front Porch when Front Opens
+- alias: Doors - Turn on Living Room when Front Opens
 
   trigger:
     - platform: state
@@ -123,16 +126,17 @@
 
   action:
     - service: light.turn_on
-      entity_id: group.living_room_lights
+      entity_id:
+        - light.living_room_lights
       data:
-       xy_color: [ 0.5134, 0.4149 ]
+       color_temp: 447
        brightness_pct: 100
 
         ##########################################################
-        ## Turn On Back Door when Door Opens
+        ## Turn on Back Door Lights when Door Opens
         ##########################################################
 
-- alias: Doors - Turn on Back Door when Back Opens
+- alias: Doors - Turn on Back Door Lights when Door Opens
 
   trigger:
     - platform: state
@@ -150,7 +154,8 @@
 
   action:
     - service: light.turn_on
-      entity_id: group.back_door
+      entity_id:
+        - light.back_door
       data:
        brightness_pct: 100
 
@@ -180,7 +185,8 @@
 
   action:
     - service: light.turn_on
-      entity_id: group.back_door
+      entity_id:
+        - light.back_door
       data:
         brightness_pct: 1
         transition: 300
@@ -211,9 +217,13 @@
     - condition: state
       entity_id: group.household
       state: 'home'
+    - condition: state
+      entity_id: group.friends_and_family
+      state: 'not_home'
 
   action:
     - service: light.turn_off
-      entity_id: group.back_door
+      entity_id:
+        - light.back_door
       data:
         transition: 900

@@ -24,7 +24,8 @@
 
   action:
     - service: light.turn_on
-      entity_id: group.front_porch
+      entity_id:
+        - light.front_porch
       data:
         brightness_pct: 100
 
@@ -54,7 +55,8 @@
 
   action:
     - service: light.turn_on
-      entity_id: group.front_porch
+      entity_id:
+        - light.front_porch
       data:
         brightness_pct: 40
         transition: 300
@@ -81,7 +83,8 @@
 
   action:
     - service: light.turn_on
-      entity_id: group.front_porch
+      entity_id:
+        - light.front_porch
       data:
         brightness_pct: 100
 
@@ -109,7 +112,7 @@
       entity_id: input_boolean.disable_doorbell
       state: 'off'
     - condition: state
-      entity_id: group.front_porch
+      entity_id: light.front_porch
       state: 'on'
       for:
         hours: 0
@@ -118,7 +121,8 @@
 
   action:
     - service: light.turn_on
-      entity_id: group.front_porch
+      entity_id:
+        - light.front_porch
       data:
         brightness_pct: 40
         transition: 300
@@ -149,15 +153,15 @@
   action:
     - service: light.turn_on
       entity_id:
-        - group.living_room_lights
+        - light.living_room_lamps
         - light.office_lamp
         - light.closet_lamp
         - light.kitchen_sink
-        - group.back_door
+        - light.back_door
         - light.garage_light
       data:
         brightness_pct: 100
-        profile: relax
+        color_temp: 447
 
         ##########################################################
         ## Turn Off Lights After Door Bell Rings and Away
@@ -189,16 +193,17 @@
   action:
     - service: light.turn_off
       entity_id:
-        - group.living_room_lights
+        - light.living_room_lights
         - light.office_lamp
         - light.closet_lamp
       data:
         transition: 900
     - service: light.turn_off
-      entity_id: light.kitchen_sink
+      entity_id:
+        - light.kitchen_sink
     - service: light.turn_on
       entity_id:
-        - group.back_door
+        - light.back_door
         - light.garage_light
       data:
         brightness_pct: 1
@@ -229,15 +234,15 @@
   action:
     - service: light.turn_on
       entity_id:
-        - group.living_room_lights
+        - light.living_room_lamps
         - light.office_lamp
         - light.closet_lamp
         - light.kitchen_sink
-        - group.back_door
+        - light.back_door
         - light.garage_light
       data:
         brightness_pct: 100
-        profile: relax
+        color_temp: 447
 
         ##########################################################
         ## Turn Off Lights After Motion Detected and Away
@@ -269,16 +274,17 @@
   action:
     - service: light.turn_off
       entity_id:
-        - group.living_room_lights
+        - light.living_room_lights
         - light.office_lamp
         - light.closet_lamp
       data:
         transition: 900
     - service: light.turn_off
-      entity_id: light.kitchen_sink
+      entity_id:
+        - light.kitchen_sink
     - service: light.turn_on
       entity_id:
-        - group.back_door
+        - light.back_door
         - light.garage_light
       data:
         brightness_pct: 1
@@ -314,8 +320,8 @@
       entity_id: script.say
       data:
         variables:
-          master: 'media_player.bathroom'
-          where: 'media_player.bathroom'
+          master: 'media_player.sonos_bathroom'
+          where: 'media_player.sonos_bathroom'
           volume: '.6'
           what: 'Someone is at the Front Door'
 
@@ -342,7 +348,7 @@
       entity_id: input_boolean.disable_doorbell
       state: 'off'
     - condition: state
-      entity_id: group.basement
+      entity_id: group.basement_occupancy
       state: 'on'
 
   action:
@@ -350,8 +356,8 @@
       entity_id: script.say
       data:
         variables:
-          master: 'media_player.baement'
-          where: 'media_player.basement'
+          master: 'media_player.sonos_basement'
+          where: 'media_player.sonos_basement'
           volume: '.6'
           what: 'Someone is at the Front Door'
 
@@ -386,8 +392,8 @@
       entity_id: script.say
       data:
         variables:
-          master: 'media_player.kitchen'
-          where: 'media_player.kitchen'
+          master: 'media_player.sonos_kitchen'
+          where: 'media_player.sonos_kitchen'
           volume: '.6'
           what: 'Someone is at the Front Door'
 
@@ -429,7 +435,40 @@
       entity_id: script.say
       data:
         variables:
-          master: 'media_player.USER1s_office'
-          where: 'media_player.USER1s_office, media_player.USER2s_office'
+          master: 'media_player.sonos_USER1s_office'
+          where: 'media_player.sonos_USER1s_office, media_player.sonos_USER2s_office'
           volume: '.6'
           what: 'Someone is at the Front Door'
+
+        ##########################################################
+        ## Pause TV when Door Bell Rings
+        ##########################################################
+
+- alias: Doorbell - Pause TV when Door Bell Rings
+
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.ring_front_door_ding
+      from: 'off'
+      to: 'on'
+
+  condition:
+    - condition: state
+      entity_id: group.household
+      state: 'home'
+    - condition: state
+      entity_id: input_boolean.disable_doorbell
+      state: 'off'
+    - condition: state
+      entity_id: input_select.remote
+      state: 'Watch TV'
+    - condition: state
+      entity_id: media_player.living_room_apple_tv
+      state: 'playing'
+
+  action:
+    - service: remote.send_command
+      entity_id: remote.media_center
+      data:
+        command: 'Pause'
+        device: 38917629

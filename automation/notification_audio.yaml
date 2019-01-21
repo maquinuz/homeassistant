@@ -27,10 +27,10 @@
       entity_id: script.say
       data:
         variables:
-          master: 'media_player.living_room'
-          where: 'media_player.media_center, media_player.living_room, media_player.dining_room, media_player.kitchen, media_player.bathroom, media_player.bedroom, media_player.USER1s_office, media_player.USER2s_office, media_player.basement'
+          master: 'media_player.sonos_living_room'
+          where: 'media_player.sonos_media_center, media_player.sonos_living_room, media_player.sonos_dining_room, media_player.sonos_kitchen, media_player.sonos_bathroom, media_player.sonos_bedroom, media_player.sonos_USER1s_office, media_player.sonos_USER2s_office, media_player.sonos_basement'
           volume: '1'
-          what: 'You are not Authorized to be Here. Law Enforcement Has Been Notified'
+          what: 'You are not Authorized to be Here. Law Enforcement Has Been Notified!'
 
         ##########################################################
         ## Welcome Home USER1 Audio Greeting
@@ -52,7 +52,7 @@
       entity_id: input_boolean.USER1_greeting
       state: 'on'
     - condition: state
-      entity_id: input_boolean.disable_voice_greeting
+      entity_id: input_boolean.disable_notifications
       state: 'off'
     - condition: time
       after: '09:00'
@@ -64,10 +64,10 @@
       entity_id: script.say
       data:
         variables:
-          master: 'media_player.living_room'
-          where: 'media_player.living_room, media_player.dining_room, media_player.kitchen'
-          volume: '.5'
-          what: 'Welcome Home USER1'
+          master: 'media_player.sonos_living_room'
+          where: 'media_player.sonos_living_room, media_player.sonos_dining_room, media_player.sonos_kitchen'
+          volume: '0.5'
+          what: 'Welcome home, USER1.'
     - delay: '00:02:00'
     - service: homeassistant.turn_off
       entity_id: input_boolean.USER1_greeting
@@ -101,7 +101,7 @@
       entity_id: binary_sensor.USER2_office_occupancy
       state: 'on'
     - condition: state
-      entity_id: input_boolean.disable_voice_greeting
+      entity_id: input_boolean.disable_notifications
       state: 'off'
     - condition: time
       after: '09:00'
@@ -113,10 +113,10 @@
       entity_id: script.say
       data:
         variables:
-          master: 'media_player.USER2s_office'
-          where: 'media_player.USER2s_office'
-          volume: '.5'
-          what: 'USER1 is Home'
+          master: 'media_player.sonos_USER2s_office'
+          where: 'media_player.sonos_USER2s_office'
+          volume: '0.5'
+          what: 'USER1, is Home.'
 
         ##########################################################
         ## Welcome Home USER2 Audio Greeting
@@ -138,7 +138,7 @@
       entity_id: input_boolean.USER2_greeting
       state: 'on'
     - condition: state
-      entity_id: input_boolean.disable_voice_greeting
+      entity_id: input_boolean.disable_notifications
       state: 'off'
     - condition: time
       after: '09:00'
@@ -150,10 +150,10 @@
       entity_id: script.say
       data:
         variables:
-          master: 'media_player.living_room'
-          where: 'media_player.living_room, media_player.dining_room, media_player.kitchen'
-          volume: '.5'
-          what: 'Welcome Home USER2'
+          master: 'media_player.sonos_living_room'
+          where: 'media_player.sonos_living_room, media_player.sonos_dining_room, media_player.sonos_kitchen'
+          volume: '0.5'
+          what: 'Welcome home, USER2.'
     - delay: '00:02:00'
     - service: homeassistant.turn_off
       entity_id: input_boolean.USER2_greeting
@@ -187,7 +187,7 @@
       entity_id: binary_sensor.office_occupancy
       state: 'on'
     - condition: state
-      entity_id: input_boolean.disable_voice_greeting
+      entity_id: input_boolean.disable_notifications
       state: 'off'
     - condition: time
       after: '09:00'
@@ -199,10 +199,10 @@
       entity_id: script.say
       data:
         variables:
-          master: 'media_player.USER1s_office'
-          where: 'media_player.USER1s_office'
-          volume: '.5'
-          what: 'USER2 is Home'
+          master: 'media_player.sonos_USER1s_office'
+          where: 'media_player.sonos_USER1s_office'
+          volume: '0.5'
+          what: 'USER2, is Home'
 
         ##########################################################
         ## Welcome Home USER1 and USER2 Audio Greeting
@@ -230,7 +230,7 @@
       entity_id: input_boolean.USER2_greeting
       state: 'on'
     - condition: state
-      entity_id: input_boolean.disable_voice_greeting
+      entity_id: input_boolean.disable_notifications
       state: 'off'
     - condition: time
       after: '09:00'
@@ -242,10 +242,10 @@
       entity_id: script.say
       data:
         variables:
-          master: 'media_player.living_room'
-          where: 'media_player.living_room, media_player.dining_room, media_player.kitchen'
-          volume: '.5'
-          what: 'Welcome Home USER1 and USER2'
+          master: 'media_player.sonos_living_room'
+          where: 'media_player.sonos_living_room, media_player.sonos_dining_room, media_player.sonos_kitchen'
+          volume: '0.5'
+          what: 'Welcome Home, USER1 and USER2'
     - delay: '00:02:00'
     - service: homeassistant.turn_off
       entity_id: input_boolean.USER1_greeting, input_boolean.USER2_greeting
@@ -273,7 +273,7 @@
       entity_id: input_boolean.USER2_away
       state: 'on'
     - condition: state
-      entity_id: input_boolean.disable_voice_greeting
+      entity_id: input_boolean.disable_notifications
       state: 'off'
     - condition: time
       after: '09:00'
@@ -286,38 +286,38 @@
     - delay: '00:00:03'
     - service: media_player.sonos_unjoin
       entity_id:
-        - media_player.living_room
-        - media_player.dining_room
-        - media_player.kitchen
-        - media_player.bathroom
-        - media_player.USER1s_office
+        - media_player.sonos_living_room
+        - media_player.sonos_dining_room
+        - media_player.sonos_kitchen
+        - media_player.sonos_bathroom
+        - media_player.sonos_USER1s_office
     - delay: '00:00:01'
     - service: media_player.sonos_join
       data:
-        master: media_player.USER1s_office
+        master: media_player.sonos_USER1s_office
       entity_id:
-        - media_player.living_room
-        - media_player.dining_room
-        - media_player.kitchen
-        - media_player.bathroom
-        - media_player.bedroom
-        - media_player.USER1s_office
+        - media_player.sonos_living_room
+        - media_player.sonos_dining_room
+        - media_player.sonos_kitchen
+        - media_player.sonos_bathroom
+        - media_player.sonos_bedroom
+        - media_player.sonos_USER1s_office
     - delay: '00:00:01'
     - service: media_player.volume_set
       entity_id:
-        - media_player.living_room
-        - media_player.dining_room
-        - media_player.kitchen
-        - media_player.bathroom
-        - media_player.bedroom
-        - media_player.USER1s_office
+        - media_player.sonos_living_room
+        - media_player.sonos_dining_room
+        - media_player.sonos_kitchen
+        - media_player.sonos_bathroom
+        - media_player.sonos_bedroom
+        - media_player.sonos_USER1s_office
       data:
-        volume_level: '.6'
+        volume_level: '0.6'
     - delay: '00:00:02'
-    - service: tts.google_say
+    - service: tts.amazon_polly_say
       data_template:
-        entity_id: media_player.USER1s_office
-        message: "USER2 has left work and will arrive Home in about {{states('sensor.USER2_to_home')}} minutes"
+        entity_id: media_player.sonos_USER1s_office
+        message: "USER2 has left work, and will arrive Home in about, {{states('sensor.USER2_to_home')}} minutes"
     - delay: '00:00:25'
     - service: media_player.sonos_restore
       data:

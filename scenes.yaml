@@ -2,25 +2,6 @@
 ## Scenes
 #################################################################
 
-  - name: Security
-    entities:
-        input_boolean.alarm_tripped:
-            state: on
-        group.hue_lights:
-            state: on
-            flash: long
-            brightness_pct: 100
-            xy_color: [0.6531,0.2834]
-        group.hue_lights_exterior:
-            state: on
-            brightness_pct: 100
-        group.wink_lights:
-            state: on
-            brightness_pct: 100
-        group.wink_exterior:
-            state: on
-            brightness_pct: 100
-
   - name: Vacation
     entities:
         light.office_ceiling:
@@ -29,13 +10,13 @@
         light.kitchen_sink:
             state: on
             brightness_pct: 1
-        group.living_room_lamps:
+        light.living_room_lamps:
             state: on
             brightness_pct: 25
-            profile: relax
-        light.closet_lamp:
+            color_temp: 447
+        light.bedroom_closet_ceiling:
             state: on
-            brightness_pct: 25
+            brightness_pct: 1
 
   - name: Vacation Disable Automation
     entities:

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #################################################################
-## Home Assistant Managment Tool
+## Home Assistant Managment Tool Old
 #################################################################
 
 ##########################################################
@@ -122,7 +122,7 @@ do
 
  if [ "$action" == "6" ];then
    clear
-   echo "Checkign Size of Home Assistant Databae..."
+   echo "Checking Size of Home Assistant Database..."
    echo " "
    ssh -t $hauser@$hahost "sudo du -sh /var/lib/mysql | cut -c -5"
    echo " "

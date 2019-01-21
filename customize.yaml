@@ -3,26 +3,24 @@
 #################################################################
 
         ##########################################################
-        ## Thermostat
+        ## Climate
         ##########################################################
 
   climate.main_floor:
     friendly_name: Thermostat
-  climate.window_unit:
-    friendly_name: Window Unit
-    icon: mdi:air-conditioner
+    icon: mdi:thermostat-box
   climate.basement_heater:
     icon: mdi:radiator
-  automation.climate__turn_on_summer:
+  automation.climate_turn_on_summer:
     icon: mdi:sunglasses
     friendly_name: Auto on During Summer Enabled
-  automation.climate__turn_off_summer:
+  automation.climate_turn_off_summer:
     icon: mdi:sunglasses
     friendly_name: Auto off During Summer Enabled
-  automation.climate__turn_on_winter:
+  automation.climate_turn_on_winter:
     icon: mdi:snowman
     friendly_name: Auto on During Winter Enabled
-  automation.climate__turn_off_winter:
+  automation.climate_turn_off_winter:
     icon: mdi:snowman
     friendly_name: Auto off During Winter Enabled
   group.summer_mode:
@@ -37,10 +35,22 @@
   sensor.main_floor_temperature:
     friendly_name: Dining Room Temperature
   binary_sensor.main_floor_occupancy:
+    device_class: occupancy
     friendly_name: Dining Room Occupancy
   sensor.wink_relay_sensor_humidity:
     icon: mdi:water-percent
     friendly_name: Living Room Humidity
+  sensor.thermostat_climate_mode:
+    icon: mdi:thermostat-box
+  sensor.hvac_status:
+    icon: mdi:fan
+  fan.office_fan:
+    friendly_name: Office Fan
+  climate.office_fan:
+    friendly_name: Office Heater
+    icon: mdi:radiator
+  sensor.office_fan_humidity:
+    friendly_name: Office Humidity
 
         ##########################################################
         ## Device Trackers
@@ -49,35 +59,29 @@
   device_tracker.USER1DEVICE:
     icon: mdi:human-male
     friendly_name: USER1
-  device_tracker.USER1s_iphone:
-    icon: mdi:cellphone-iphone
-    friendly_name: USER1's iPhone (iOS)
-  device_tracker.USER1siphone:
-    icon: mdi:cellphone-iphone
-    friendly_name: USER1's iPhone (Router)
-  device_tracker.USER2s_iphone:
-    icon: mdi:cellphone-iphone
-    friendly_name: USER2's iPhone (iOS)
-  device_tracker.USER2siphone:
-    icon: mdi:cellphone-iphone
-    friendly_name: USER2's iPhone (Router)
   device_tracker.USER2DEVICE:
     icon: mdi:human-female
     friendly_name: USER2
-  device_tracker.USER1sapplewatch:
-    icon: mdi:watch
-  device_tracker.USER2sapplewatch:
-    icon: mdi:mdi:watch
+  device_tracker.USER1s_iphone:
+    icon: mdi:cellphone-iphone
+    friendly_name: USER1's iPhone
+  device_tracker.USER2s_iphone:
+    icon: mdi:cellphone-iphone
+    friendly_name: USER2's iPhone
   device_tracker.USER1sipad:
     icon: mdi:tablet-ipad
   device_tracker.USER2sipad:
     icon: mdi:tablet-ipad
-  device_tracker.asuemann0617mac:
+  device_tracker.USER1smacbookpro:
     icon: mdi:laptop-mac
-  device_tracker.USER1smacbookair:
+  device_tracker.USER2smacbookairold:
     icon: mdi:laptop-mac
   device_tracker.USER2smacbookair:
     icon: mdi:laptop-mac
+  device_tracker.USER1simac:
+    icon: mdi:desktop-mac
+  device_tracker.USER2simac:
+    icon: mdi:desktop-mac
 
         ##########################################################
         ## Friends and Family
@@ -85,7 +89,7 @@
 
   device_tracker.REDACTED:
     icon: mdi:human-male
-    friendly_name: REDACTED
+    friendly_name: REDACTEDny
   device_tracker.REDACTED:
     icon: mdi:human-female
     friendly_name: REDACTED
@@ -97,9 +101,6 @@
     friendly_name: REDACTED
   device_tracker.REDACTED:
     icon: mdi:human-female
-    friendly_name: REDACTED
-  device_tracker.REDACTED:
-    icon: mdi:human-male
     friendly_name: REDACTED
   device_tracker.REDACTED:
     icon: mdi:human-male
@@ -121,9 +122,6 @@
   device_tracker.REDACTEDiphone:
     icon: mdi:human-male
     friendly_name: REDACTED
-  device_tracker.REDACTEDiphone:
-    icon: mdi:human-male
-    friendly_name: REDACTED
   device_tracker.REDACTED:
     icon: mdi:human-female
     friendly_name: REDACTED
@@ -136,30 +134,53 @@
   device_tracker.REDACTED:
     icon: mdi:human-male
     friendly_name: REDACTED
+  device_tracker.REDACTED:
+    icon: mdi:human-male
+    friendly_name: REDACTED
+  device_tracker.REDACTED:
+    icon: mdi:human-female
+    friendly_name: REDACTED
+  device_tracker.REDACTED:
+    icon: mdi:human-male
+    friendly_name: REDACTED
+  device_tracker.REDACTED:
+    icon: mdi:human-female
+    friendly_name: REDACTED
+
+        ##########################################################
+        ##  Hubs
+        ##########################################################
+
+  sensor.myq_status:
+    friendly_name: MyQ Home Hub
+    icon: mdi:garage-alert
+  sensor.hue_hub_status:
+    friendly_name: Hue Hub
+    icon: mdi:ethernet
+
+        ##########################################################
+        ##  Garage Door
+        ##########################################################
+
+  cover.garage_door:
+    device_class: garage
+  cover.wink_garage_door:
+    device_class: garage
+    friendly_name: Wink Garage Door
 
         ##########################################################
         ##  Doors
         ##########################################################
 
-  cover.garage_door:
-    icon: mdi:garage
-    homebridge_cover_type: garage_door
-  cover.wink_garage_door:
-    icon: mdi:car
-    homebridge_cover_type: garage_door
-    homebridge_hidden: true
-    friendly_name: Garage Door
-  cover.myq:
-    homebridge_hidden: true
   binary_sensor.front_door_opened:
+    device_class: door
     friendly_name: Front Door
-    icon: mdi:door
   binary_sensor.back_door_opened:
+    device_class: door
     friendly_name: Back Door
-    icon: mdi:door
   binary_sensor.basement_door_opened:
+    device_class: door
     friendly_name: Basement Door
-    icon: mdi:door
 
         ##########################################################
         ## Door Bell
@@ -168,11 +189,8 @@
   binary_sensor.ring_front_door_ding:
     icon: mdi:bell-ring
     friendly_name: Front Door Ring
-    homebridge_hidden: true
   binary_sensor.ring_front_door_motion:
-    homebridge_hidden: true
-  binary_sensor.front_door_motion:
-    homebridge_hidden: true
+    friendly_name: Front Door Motion
   sensor.ring_front_door_battery:
     friendly_name: Door Bell
   sensor.ring_front_door_last_ding:
@@ -199,71 +217,23 @@
 
   group.living_room:
     icon: mdi:sofa
-  group.living_room_lights:
-    icon: mdi:sofa
-    friendly_name: Living Room
-    emulated_hue_hidden: false
-    emulated_hue_name: "Remote LVNGRM"
   group.dining_room:
     icon: mdi:silverware-variant
-  group.dining_room_lights:
-    icon: mdi:silverware-variant
-    friendly_name: Dining Room
-    emulated_hue_hidden: false
-    emulated_hue_name: "Remote DNGRM"
   group.bedroom:
     icon: mdi:hotel
-  group.bedroom_lights:
-    icon: mdi:hotel
-    friendly_name: Bedroom
-    emulated_hue_hidden: false
-    emulated_hue_name: "Remote BDRM"
   group.kitchen:
     icon: mdi:fridge
-  group.kitchen_lights:
-    icon: mdi:fridge
-    friendly_name: Kitchen
-    emulated_hue_hidden: false
-    emulated_hue_name: "Remote KTCHN"
-  group.stairs:
-    icon: mdi:stairs
-    emulated_hue_hidden: false
-    emulated_hue_name: "Remote STRS"
   group.USER1_office:
     icon: mdi:desktop-mac
-  group.USER1_office_lights:
-    icon: mdi:desktop-mac
-    friendly_name: USER1 Office
-  group.USER2_office_lights:
-    icon: mdi:desktop-mac
-    friendly_name: USER2 Office
   group.guest_bedroom:
-    icon: mdi:hotel
-    friendly_name: Guest Bedroom
-  group.guest_bedroom_lights:
     icon: mdi:hotel
     friendly_name: Guest Bedroom
   group.basement:
     icon: mdi:stairs
-  group.basement_lighting:
-    icon: mdi:stairs
-    friendly_name: Basement
-  group.front_porch:
-    icon: mdi:home
-  group.back_door:
-    icon: mdi:home
-  group.back_porch:
-    icon: mdi:home
   group.backyard_lighting:
-    icon: mdi:nature
-  group.living_room_lamps:
-    icon: mdi:lamp
-  group.USER2_office_ceiling:
-    icon: mdi:ceiling-light
+    icon: mdi:gate
   group.interior:
     friendly_name: Interior Lights
-  group.basement_lights:
-    icon: mdi:ceiling-light
 
         ##########################################################
         ## Locks
@@ -271,16 +241,10 @@
 
   lock.front_door:
     friendly_name: Front Door Lock
-    homebridge_mfg: Schlage
-    homebridge_model: BE469
   lock.back_door:
     friendly_name: Back Door Lock
-    homebridge_mfg: Schlage
-    homebridge_model: BE469
   lock.basement_door:
     friendly_name: Basement Door Lock
-    homebridge_mfg: Schlage
-    homebridge_model: BE469
   group.all_locks:
     friendly_name: Door Locks
 
@@ -302,26 +266,43 @@
   sensor.speedtest_upload:
     icon: mdi:speedometer
   binary_sensor.wink_hub:
+    decice_class: connectivity
     friendly_name: Wink Hub
     icon: mdi:ethernet
-    homebridge_hidden: true
   binary_sensor.wink_relay:
+    decice_class: connectivity
     friendly_name: Wink Relay
     icon: mdi:ethernet
-    homebridge_hidden: true
   binary_sensor.wink_relay_sensor_presence:
-    homebridge_hidden: true
+    device_class: occupancy
   binary_sensor.philips_hue:
+    decice_class: connectivity
     friendly_name: Hue Hub
     icon: mdi:ethernet
-    homebridge_hidden: true
   binary_sensor.basement_drain_water_sensor_liquid_detected:
+    device_class: moisture
     friendly_name: Basement Drain Water Sensor
   binary_sensor.sump_pump_water_sensor_liquid_detected:
+    device_class: moisture
     friendly_name: Sump Pump Water Sensor
   sensor.holidays_calendar:
     icon: mdi:calendar
     friendly_name: Upcoming Holiday
+  binary_sensor.wan:
+    friendly_name: Network WAN
+    icon: mdi:wan
+  binary_sensor.gateway:
+    friendly_name: Network Gateway
+    icon: mdi:lan
+  sensor.att_router_status:
+    friendly_name: at&t Router Gateway
+    icon: mdi:router-wireless
+  binary_sensor.rochester_vpn:
+    friendly_name: Rochester VPN
+    icon: mdi:lan-connect
+  binary_sensor.charleston_vpn:
+    friendly_name: Charleston VPN
+    icon: mdi:lan-connect
 
         ##########################################################
         ## Switches
@@ -335,25 +316,32 @@
   switch.air_purifier:
     icon: mdi:fan
     friendly_name: Air Purifier
-    homebridge_hidden: true
-  switch.office_fan:
-    icon: mdi:fan
-    friendly_name: Office Fan
   switch.basement_heater:
     icon: mdi:radiator
-    homebridge_hidden: true
   switch.christmas_tree:
     icon: mdi:pine-tree
     friendly_name: Christmas Tree
-    homebridge_hidden: true
   switch.living_room_ceiling_fan:
     icon: mdi:ceiling-light
     friendly_name: Living Room Ceiling Fan
-    homebridge_hidden: true
   switch.front_yard_lighting:
     icon: mdi:nature
   switch.myq_garage_outlet:
     icon: mdi:power-socket-us
+  switch.att_router:
+    icon: mdi:router-wireless
+  switch.unificloudkey:
+    icon: mdi:server-network
+  switch.front_porch_camera:
+    icon: mdi:cctv
+  switch.side_yard_camera:
+    icon: mdi:cctv
+  switch.backyard_camera:
+    icon: mdi:cctv
+  switch.living_room_camera:
+    icon: mdi:cctv
+  switch.kitchen_camera:
+    icon: mdi:cctv
 
         ##########################################################
         ## Lights
@@ -366,26 +354,29 @@
     emulated_hue_name: "Remote HLLWY"
   light.bathroom_vanity:
     icon: mdi:water-pump
-    emulated_hue_hidden: false
-    emulated_hue_name: "Remote BTH"
+  light.shower:
+    friendly_name: Shower Light
+    icon: mdi:shower
   light.USER1s_nightstand:
     icon: mdi:lamp
   light.bedroom_lamp:
-    icon: mdi:lamp
+    icon: mdi:floor-lamp
   light.closet_lamp:
-    icon: mdi:lamp
-  light.guest_bedroom_lamp:
-    icon: mdi:lamp
+    icon: mdi:floor-lamp
   light.guest_bedroom_nightstand:
     icon: mdi:lamp
+  light.guest_bedroom_ceiling:
+    icon: mdi:ceiling-light
+  light.bedroom_closet_ceiling:
+    icon: mdi:ceiling-light
   light.office_lamp:
-    icon: mdi:lamp
+    icon: mdi:floor-lamp
   light.office_ceiling:
     icon: mdi:ceiling-light
   light.USER2s_nightstand:
     icon: mdi:lamp
   light.garage_light:
-    icon: mdi:spotlight-beam
+    icon: mdi:track-light
   light.media_center_lighting:
     icon: mdi:television
   light.basement_stairs:
@@ -397,9 +388,73 @@
   light.kitchen_sink:
     icon: mdi:ceiling-light
   light.kitchen_cabinets:
-    icon: mdi:ceiling-light
+    icon: mdi:wall-sconce-flat
   light.kitchen_ceiling:
     icon: mdi:ceiling-light
+  light.living_room_lights:
+    icon: mdi:sofa
+    friendly_name: Living Room
+    emulated_hue_hidden: false
+    emulated_hue_name: "Remote LVNGRM"
+  light.dining_room_lights:
+    icon: mdi:silverware-variant
+    friendly_name: Dining Room
+    emulated_hue_hidden: false
+    emulated_hue_name: "Remote DNGRM"
+  light.bedroom_lights:
+    icon: mdi:hotel
+    friendly_name: Bedroom
+    emulated_hue_hidden: false
+    emulated_hue_name: "Remote BDRM"
+  light.kitchen_lights:
+    icon: mdi:fridge
+    friendly_name: Kitchen
+    emulated_hue_hidden: false
+    emulated_hue_name: "Remote KTCHN"
+  light.stairs:
+    icon: mdi:stairs
+    emulated_hue_hidden: false
+    emulated_hue_name: "Remote STRS"
+  light.bathroom_lights:
+    icon: mdi:shower
+    friendly_name: Bathroom
+    emulated_hue_hidden: false
+    emulated_hue_name: "Remote BTH"
+  light.upstairs_bathroom_lights:
+    icon: mdi:water-pump
+    friendly_name: UpstairsBathroom
+  light.USER1_office_lights:
+    icon: mdi:desktop-mac
+    friendly_name: USER1 Office
+  light.USER2_office_lights:
+    icon: mdi:desktop-mac
+    friendly_name: USER2 Office
+  light.guest_bedroom_lights:
+    icon: mdi:hotel
+    friendly_name: Guest Bedroom
+  light.basement_lighting:
+    icon: mdi:stairs
+    friendly_name: Basement
+  light.front_porch:
+    icon: mdi:wall-sconce
+  light.back_door:
+    icon: mdi:ceiling-light
+  light.backyard_deck:
+    icon: mdi:wall-sconce
+    friendly_name: Backyard Deck
+  light.backyard_patio:
+    icon: mdi:wall-sconce
+  light.living_room_lamps:
+    icon: mdi:floor-lamp
+  light.USER2_office_ceiling:
+    icon: mdi:ceiling-light
+  light.basement_lights:
+    icon: mdi:ceiling-light
+  light.globe:
+    icon: mdi:globe-model
+  light.upstairs_bathroom:
+    friendly_name: Upstairs Bathroom Vanity
+    icon: mdi:water-pump
 
         ##########################################################
         ## Weather
@@ -478,6 +533,17 @@
     icon: mdi:theater
   media_player.roku_REDACTED:
     friendly_name: Basement Roku
+  media_player.media_center_receiver:
+    icon: mdi:speaker
+
+        ##########################################################
+        ## Vacuums
+        ##########################################################
+
+  vacuum.downstairs_roomba:
+    icon: mdi:robot-vacuum
+  vacuum.upstairs_roomba:
+    icon: mdi:robot-vacuum
 
         ##########################################################
         ## Amazon Echo Integration
@@ -492,6 +558,9 @@
   input_boolean.front_porch_rainbow:
     emulated_hue_hidden: false
     emulated_hue_name: "Front Porch Party"
+  input_boolean.bedroom_rainbow:
+    emulated_hue_hidden: false
+    emulated_hue_name: "Bedroom Party"
   input_boolean.vacation_mode:
     emulated_hue_hidden: false
     emulated_hue_name: "Vacation Mode"
@@ -531,15 +600,18 @@
   input_boolean.bedroom_tv:
     emulated_hue_hidden: false
     emulated_hue_name: "Bedroom TV"
+  input_boolean.office_tv:
+    emulated_hue_hidden: false
+    emulated_hue_name: "Office TV"
 
         ##########################################################
         ## Alarm
         ##########################################################
 
-  automation.security__motion_alarm:
+  automation.security_motion_alarm:
     icon: mdi:shield-outline
     friendly_name: Motion Security Enabled
-  automation.security__door_alarm:
+  automation.security_door_alarm:
     icon: mdi:shield-outline
     friendly_name: Door Security Enabled
   wink.siren:
@@ -550,36 +622,45 @@
         ## Sonos
         ##########################################################
 
-  media_player.media_center:
+  media_player.sonos_media_center:
     icon: mdi:speaker
     friendly_name: Media Center Sonos
-  media_player.living_room:
+  media_player.sonos_living_room:
     icon: mdi:speaker
     friendly_name: Living Room Sonos
-  media_player.dining_room:
+  media_player.sonos_dining_room:
     icon: mdi:speaker
     friendly_name: Dining Room Sonos
-  media_player.kitchen:
+  media_player.sonos_kitchen:
     icon: mdi:speaker
     friendly_name: Kitchen Sonos
-  media_player.bathroom:
+  media_player.sonos_bathroom:
     icon: mdi:speaker
     friendly_name: Bathroom Sonos
-  media_player.USER1s_office:
+  media_player.sonos_USER1s_office:
     icon: mdi:speaker
     friendly_name: USER1's Office Sonos
-  media_player.USER2s_office:
+  media_player.sonos_USER2s_office:
     icon: mdi:speaker
     friendly_name: USER2's Office Sonos
-  media_player.basement:
+  media_player.sonos_basement:
     icon: mdi:speaker
     friendly_name: Basement Sonos
-  media_player.backyard_patio:
+  media_player.sonos_backyard_patio:
     icon: mdi:speaker
     friendly_name: Backyard Patio Sonos
-  media_player.bedroom:
+  media_player.sonos_bedroom:
     icon: mdi:speaker
     friendly_name: Bedroom Sonos
+
+        ##########################################################
+        ## Receiver
+        ##########################################################
+
+  sensor.receiver_input:
+    icon: mdi:video-input-hdmi
+  sensor.receiver_sound_mode:
+    icon: mdi:surround-sound
 
         ##########################################################
         ## Remote
@@ -595,17 +676,17 @@
 
   sensor.nas_status:
     friendly_name: System Status
-    icon: mdi:server-network
-  sensor.nas_smart_status_drive_01:
+    icon: mdi:nas
+  sensor.nas_smart_status_drive_0_1:
     friendly_name: Drive 1 SMART Status
     icon: mdi:harddisk
-  sensor.nas_smart_status_drive_02:
+  sensor.nas_smart_status_drive_0_2:
     friendly_name: Drive 2 SMART Status
     icon: mdi:harddisk
-  sensor.nas_smart_status_drive_03:
+  sensor.nas_smart_status_drive_0_3:
     friendly_name: Drive 3 SMART Status
     icon: mdi:harddisk
-  sensor.nas_smart_status_drive_04:
+  sensor.nas_smart_status_drive_0_4:
     friendly_name: Drive 4 SMART Status
     icon: mdi:harddisk
   sensor.nas_volume_used_storage:
@@ -639,34 +720,174 @@
   sensor.nas_network_down_eth1:
     friendly_name: eth1 Download
   sensor.nas_system_temperature:
-    friendly_name: System Temprature
+    friendly_name: System Temperature
   sensor.nas_cpu_temperature:
-    friendly_name: CPU Temprature
+    friendly_name: CPU Temperature
   sensor.nas_temperature_drive_01:
-    friendly_name: Drive 1 Temprature
+    friendly_name: Drive 1 Temperature
   sensor.nas_temperature_drive_02:
-    friendly_name: Drive 2 Temprature
+    friendly_name: Drive 2 Temperature
   sensor.nas_temperature_drive_03:
-    friendly_name: Drive 3 Temprature
+    friendly_name: Drive 3 Temperature
   sensor.nas_temperature_drive_04:
-    friendly_name: Drive 4 Temprature
+    friendly_name: Drive 4 Temperature
+
+        ##########################################################
+        ## UPS
+        ##########################################################
+
+  sensor.ups_status:
+    icon: mdi:car-battery
+  sensor.ups_battery_charge:
+    device_class: battery
+    icon: mdi:battery
+  sensor.ups_battery_runtime_mins:
+    icon: mdi:timer
 
         ##########################################################
         ## DNS
         ##########################################################
 
-  sensor.pihole_ads_blocked_today:
+  sensor.pi_hole_ads_blocked_today:
     friendly_name: DNS 1 Queries Blocked
     icon: mdi:dns
-  sensor.pihole_ads_blocked_today_2:
+  sensor.pi_hole_ads_blocked_today_2:
     friendly_name: DNS 2 Queries Blocked
     icon: mdi:dns
-  sensor.pihole_ads_percentage_blocked_today:
+  sensor.pi_hole_ads_percentage_blocked_today:
     friendly_name: DNS 1 Percentage Blocked
     icon: mdi:dns
-  sensor.pihole_ads_percentage_blocked_today_2:
+  sensor.pi_hole_ads_percentage_blocked_today_2:
     friendly_name: DNS 2 Percentage Blocked
     icon: mdi:dns
+  sensor.pi_hole_dns_queries_today:
+    friendly_name: DNS 1 Queries
+    icon: mdi:dns
+  sensor.pi_hole_dns_queries_today_2:
+    friendly_name: DNS 2 Queries
+    icon: mdi:dns
+
+        ##########################################################
+        ## Weather
+        ##########################################################
+
+  weather.dark_sky:
+    friendly_name: Weather Forecast
+
+        ##########################################################
+        ## Smoke Alarm
+        ##########################################################
+
+  binary_sensor.living_room_nest_protect_online:
+    friendly_name: Living Room Smoke Alarm
+    icon: mdi:smoke-detector
+  binary_sensor.bedroom_nest_protect_online:
+    friendly_name: Bedroom Smoke Alarm
+    icon: mdi:smoke-detector
+  binary_sensor.kitchen_nest_protect_online:
+    friendly_name: Kitchen Smoke Alarm
+    icon: mdi:smoke-detector
+  binary_sensor.hallway_nest_protect_online:
+    friendly_name: Hallway Smoke Alarm
+    icon: mdi:smoke-detector
+  binary_sensor.upstairs_nest_protect_online:
+    friendly_name: Upstairs Smoke Alarm
+    icon: mdi:smoke-detector
+  binary_sensor.basement_nest_protect_online:
+    friendly_name: Basement Smoke Alarm
+    icon: mdi:smoke-detector
+  sensor.living_room_nest_protect_battery_health:
+    friendly_name: Living Room Smoke Alarm Battery
+    icon: mdi:battery
+  sensor.bedroom_nest_protect_battery_health:
+    friendly_name: Bedroom Smoke Alarm Battery
+    icon: mdi:battery
+  sensor.hallway_nest_protect_battery_health:
+    friendly_name: Hallway Smoke Alarm Battery
+    icon: mdi:battery
+  sensor.kitchen_nest_protect_battery_health:
+    friendly_name: Kitchen Smoke Alarm Battery
+    icon: mdi:battery
+  sensor.upstairs_nest_protect_battery_health:
+    friendly_name: Upstairs Smoke Alarm Battery
+    icon: mdi:battery
+  sensor.basement_nest_protect_battery_health:
+    friendly_name: Basement Smoke Alarm Battery
+    icon: mdi:battery
+  sensor.living_room_nest_protect_color_status:
+    friendly_name: Living Room Smoke Alarm
+    icon: mdi:smoke-detector
+  sensor.bedroom_nest_protect_color_status:
+    friendly_name: Bedroom Smoke Alarm
+    icon: mdi:smoke-detector
+  sensor.kitchen_nest_protect_color_status:
+    friendly_name: Kitchen Smoke Alarm
+    icon: mdi:smoke-detector
+  sensor.hallway_nest_protect_color_status:
+    friendly_name: Hallway Smoke Alarm
+    icon: mdi:smoke-detector
+  sensor.upstairs_nest_protect_color_status:
+    friendly_name: Upstairs Smoke Alarm
+    icon: mdi:smoke-detector
+  sensor.basement_nest_protect_color_status:
+    friendly_name: Basement Smoke Alarm
+    icon: mdi:smoke-detector
+  sensor.living_room_nest_protect_co_status:
+    friendly_name: Living Room CO
+    icon: mdi:smoke-detector
+  sensor.bedroom_nest_protect_co_status:
+    friendly_name: Bedroom CO
+    icon: mdi:smoke-detector
+  sensor.kitchen_nest_protect_co_status:
+    friendly_name: Kitchen CO
+    icon: mdi:smoke-detector
+  sensor.hallway_nest_protect_co_status:
+    friendly_name: Hallway CO
+    icon: mdi:smoke-detector
+  sensor.upstairs_nest_protect_co_status:
+    friendly_name: Upstairs CO
+    icon: mdi:smoke-detector
+  sensor.basement_nest_protect_co_status:
+    friendly_name: Basement CO
+    icon: mdi:smoke-detector
+  sensor.living_room_nest_protect_smoke_status:
+    friendly_name: Living Room Smoke
+    icon: mdi:smoke-detector
+  sensor.bedroom_nest_protect_smoke_status:
+    friendly_name: Bedroom Smoke
+    icon: mdi:smoke-detector
+  sensor.kitchen_nest_protect_smoke_status:
+    friendly_name: Kitchen Smoke
+    icon: mdi:smoke-detector
+  sensor.hallway_nest_protect_smoke_status:
+    friendly_name: Hallway Smoke
+    icon: mdi:smoke-detector
+  sensor.upstairs_nest_protect_smoke_status:
+    friendly_name: Upstairs Smoke
+    icon: mdi:smoke-detector
+  sensor.basement_nest_protect_smoke_status:
+    friendly_name: Basement Smoke
+    icon: mdi:smoke-detector
+
+        ##########################################################
+        ## Washing Machine
+        ##########################################################
+
+  sensor.washing_machine_status:
+    icon: mdi:washing-machine
+  switch.washing_machine:
+    icon: mdi:washing-machine
+    friendly_name: Washing Machine Power
+  sensor.washing_machine_current_power:
+    icon: mdi:power-plug
+    friendly_name: Washing Machine Wattage
+
+        ##########################################################
+        ## Groups
+        ##########################################################
+
+  group.automation_on_demand:
+    friendly_name: Automation
 
         ##########################################################
         ## All Groups / Troubleshooting
@@ -674,5 +895,19 @@
 
   group.all_automations:
     hidden: false
-  #group.all_scripts:
-  #  hidden: false
+  group.all_lights:
+    hidden: false
+  group.all_switches:
+    hidden: false
+  group.all_scripts:
+    hidden: false
+  group.all_devices:
+    hidden: false
+  group.all_covers:
+    hidden: false
+  group.all_remotes:
+    hidden: false
+  group.all_vacuum_cleaners:
+    hidden: false
+  group.all_fans:
+    hidden: false
